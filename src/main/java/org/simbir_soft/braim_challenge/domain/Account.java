@@ -9,19 +9,13 @@ import lombok.*;
 import org.simbir_soft.braim_challenge.domain.dto.AccountDto;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "user_account")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Account extends BaseEntity {
-
-    public Account(AccountDto dto) {
-        firstName = dto.getFirstName();
-        lastName = dto.getLastName();
-        email = dto.getEmail();
-        password = dto.getPassword();
-    }
 
     private String firstName;
     private String lastName;
