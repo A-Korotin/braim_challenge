@@ -4,16 +4,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.dto.AccountDto;
-import org.simbir_soft.braim_challenge.exception.NonUniqueEmailException;
 import org.simbir_soft.braim_challenge.service.AccountService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-public class RegistrationController {
+public class AccountController {
 
     private final AccountService accountService;
 
@@ -22,5 +19,13 @@ public class RegistrationController {
         Account account = accountService.save(accountDto);
 
         return ResponseEntity.ok(account);
+    }
+
+    @PutMapping("/accounts/{accountId}")
+    public ResponseEntity<?> updateAccount(@Valid @RequestBody AccountDto accountDto,
+                                           @PathVariable Long accountId) {
+
+        return ResponseEntity.ok(accountService.update(accountId, accountDto));
+
     }
 }

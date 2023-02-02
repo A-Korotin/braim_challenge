@@ -11,4 +11,5 @@ public interface CrudService<T, ID> {
     void delete(ID id);
     Optional<T> find(ID id);
     Collection<T> findAll();
+    boolean existsById(ID id);
 }
