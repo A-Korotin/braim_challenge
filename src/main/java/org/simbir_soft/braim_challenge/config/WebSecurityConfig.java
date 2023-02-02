@@ -45,14 +45,9 @@ public class WebSecurityConfig {
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers("/registration").permitAll()
                 .and()
-                .formLogin().disable()
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
 
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().requestMatchers("/register");
-    }
 }
