@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+    <changeSet id="" author="Alexey Korotin">
+        <sql dbms="postgresql"
+             endDelimiter=";"
+             splitStatements="true"
+             stripComments="true">
+            CREATE TABLE IF NOT EXISTS animal_type (
+                id BIGSERIAL,
+                name TEXT NOT NULL,
+
+                CONSTRAINT pk_animal_type PRIMARY KEY  (id)
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>
