@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.AccessForbiddenException;
-import org.simbir_soft.braim_challenge.exception.InvalidAccountIdException;
+import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
 import org.simbir_soft.braim_challenge.repository.AccountRepository;
 import org.simbir_soft.braim_challenge.service.AccountService;
@@ -33,7 +33,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     private void checkId(Long id) {
         if (!repository.existsById(id)) {
-            throw new InvalidAccountIdException();
+            throw new DataMissingException();
         }
     }
 

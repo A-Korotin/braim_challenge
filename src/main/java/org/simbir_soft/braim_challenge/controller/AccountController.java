@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.BaseEntity;
 import org.simbir_soft.braim_challenge.domain.dto.AccountDto;
-import org.simbir_soft.braim_challenge.exception.InvalidAccountIdException;
+import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -43,7 +43,7 @@ public class AccountController {
     @GetMapping("/accounts/{accountId}")
     public ResponseEntity<?> getAccount(@PathVariable @NotNull @Min(value = 1) Long accountId) {
 
-        return ResponseEntity.ok(accountService.findById(accountId).orElseThrow(InvalidAccountIdException::new));
+        return ResponseEntity.ok(accountService.findById(accountId).orElseThrow(DataMissingException::new));
     }
 
     @GetMapping("/accounts/search")
