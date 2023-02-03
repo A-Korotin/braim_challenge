@@ -7,6 +7,11 @@ import org.simbir_soft.braim_challenge.exception.InvalidAccountIdException;
 import org.simbir_soft.braim_challenge.exception.NonUniqueEmailException;
 import org.simbir_soft.braim_challenge.repository.AccountRepository;
 import org.simbir_soft.braim_challenge.service.AccountService;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -14,9 +19,10 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     private final AccountRepository repository;
+    private final PasswordEncoder encoder;
 
     private void checkEmail(String email) {
         if (repository.existsByEmail(email)) {
@@ -33,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account save(Dto<Account> dto) {
         Account dtoAccount = dto.fromDto();
-
+        dtoAccount.setPassword(encoder.encode(dtoAccount.getPassword()));
         checkEmail(dtoAccount.getEmail());
 
         return repository.save(dtoAccount);
@@ -56,12 +62,12 @@ public class AccountServiceImpl implements AccountService {
         Account dtoAccount = dto.fromDto();
         checkEmailById(id, dtoAccount.getEmail());
         dtoAccount.setId(id);
+        dtoAccount.setPassword(encoder.encode(dtoAccount.getPassword()));
         return repository.save(dtoAccount);
-
     }
 
     @Override
-    public void delete(Long aLong) {
+    public void delete(Long id) {
 
     }
 
@@ -78,5 +84,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean existsById(Long id) {
         return repository.existsById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Account account = repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
+
+        return User.builder()
+                .username(account.getEmail())
+                .password(account.getPassword())
+                .build();
     }
 }

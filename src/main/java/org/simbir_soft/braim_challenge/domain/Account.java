@@ -21,7 +21,6 @@ public class Account extends BaseEntity {
     private String lastName;
     private String email;
 
-    @Transient
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnore
