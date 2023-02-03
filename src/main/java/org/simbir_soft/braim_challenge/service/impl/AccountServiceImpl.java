@@ -3,10 +3,12 @@ package org.simbir_soft.braim_challenge.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
+import org.simbir_soft.braim_challenge.exception.AccessForbiddenException;
 import org.simbir_soft.braim_challenge.exception.InvalidAccountIdException;
 import org.simbir_soft.braim_challenge.exception.NonUniqueEmailException;
 import org.simbir_soft.braim_challenge.repository.AccountRepository;
 import org.simbir_soft.braim_challenge.service.AccountService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -35,15 +37,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         }
     }
 
-    @Override
-    public Account save(Dto<Account> dto) {
-        Account dtoAccount = dto.fromDto();
-        dtoAccount.setPassword(encoder.encode(dtoAccount.getPassword()));
-        checkEmail(dtoAccount.getEmail());
-
-        return repository.save(dtoAccount);
-    }
-
     private void checkEmailById(Long id, String email) {
         Optional<Account> optionalAccount = repository.findByEmail(email);
         if (optionalAccount.isEmpty()) {
@@ -55,9 +48,33 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         }
     }
 
+    private void checkIfCurrentUserIsAllowedToModify(Long id) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<Account> accountOptional = repository.findByEmail(name);
+        if (accountOptional.isEmpty()) {
+            throw new AccessForbiddenException();
+        }
+
+        if (!accountOptional.get().getId().equals(id)) {
+            throw new AccessForbiddenException();
+        }
+    }
+
+    @Override
+    public Account save(Dto<Account> dto) {
+        Account dtoAccount = dto.fromDto();
+        dtoAccount.setPassword(encoder.encode(dtoAccount.getPassword()));
+        checkEmail(dtoAccount.getEmail());
+
+        return repository.save(dtoAccount);
+    }
+
+
     @Override
     public Account update(Long id, Dto<Account> dto) {
         checkId(id);
+        checkIfCurrentUserIsAllowedToModify(id);
+
         Account dtoAccount = dto.fromDto();
         checkEmailById(id, dtoAccount.getEmail());
         dtoAccount.setId(id);
@@ -65,9 +82,15 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         return repository.save(dtoAccount);
     }
 
+
     @Override
     public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw new AccessForbiddenException();
+        }
+        checkIfCurrentUserIsAllowedToModify(id);
 
+        repository.deleteById(id);
     }
 
     @Override
@@ -88,10 +111,10 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Account account = repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
-
         return User.builder()
                 .username(account.getEmail())
                 .password(account.getPassword())
+                .roles("User")
                 .build();
     }
 }
