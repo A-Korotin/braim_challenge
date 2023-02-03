@@ -1,13 +1,13 @@
 package org.simbir_soft.braim_challenge.controller.advice;
 
+import jakarta.validation.ConstraintViolationException;
 import org.simbir_soft.braim_challenge.exception.AccessForbiddenException;
 import org.simbir_soft.braim_challenge.exception.InvalidAccountIdException;
-import org.simbir_soft.braim_challenge.exception.NonUniqueEmailException;
+import org.simbir_soft.braim_challenge.exception.DataConflictException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
@@ -18,13 +18,13 @@ public class AccountControllerAdvice {
         return ResponseEntity.badRequest().build();
     }
 
-    @ExceptionHandler(NonUniqueEmailException.class)
-    public ResponseEntity<?> conflict(NonUniqueEmailException e) {
+    @ExceptionHandler(DataConflictException.class)
+    public ResponseEntity<?> conflict(DataConflictException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<?> handle(IllegalArgumentException e) {
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handle(ConstraintViolationException e) {
         return ResponseEntity.badRequest().build();
     }
 

@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.BaseEntity;
 import org.simbir_soft.braim_challenge.domain.dto.AccountDto;
+import org.simbir_soft.braim_challenge.exception.InvalidAccountIdException;
 import org.simbir_soft.braim_challenge.service.AccountService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
@@ -19,6 +21,7 @@ import java.util.stream.StreamSupport;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class AccountController {
 
     private final AccountService accountService;
@@ -38,12 +41,18 @@ public class AccountController {
 
     }
 
+    @GetMapping("/accounts/{accountId}")
+    public ResponseEntity<?> getAccount(@PathVariable @NotNull @Min(value = 1) Long accountId) {
+
+        return ResponseEntity.ok(accountService.find(accountId).orElseThrow(InvalidAccountIdException::new));
+    }
+
     @GetMapping("/accounts/search")
     public ResponseEntity<?> searchAccounts(@RequestParam String firstName,
                                             @RequestParam String lastName,
                                             @RequestParam String email,
-                                            @NotNull @Min(value = 0) @RequestParam(defaultValue = "0") Long from,
-                                            @NotNull @Min(value = 1) @RequestParam(defaultValue = "10") Long size) {
+                                            @RequestParam(defaultValue = "0")  @NotNull @Min(value = 0)  Long from,
+                                            @RequestParam(defaultValue = "10") @NotNull @Min(value = 1) Long size) {
 
         List<Account> filtered = StreamSupport.stream(accountService.findAll().spliterator(), false)
                 .filter(account -> account.getFirstName().toLowerCase().contains(firstName.toLowerCase()))
