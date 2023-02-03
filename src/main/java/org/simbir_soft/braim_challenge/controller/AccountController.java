@@ -3,7 +3,6 @@ package org.simbir_soft.braim_challenge.controller;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.BaseEntity;
@@ -44,7 +43,7 @@ public class AccountController {
     @GetMapping("/accounts/{accountId}")
     public ResponseEntity<?> getAccount(@PathVariable @NotNull @Min(value = 1) Long accountId) {
 
-        return ResponseEntity.ok(accountService.find(accountId).orElseThrow(InvalidAccountIdException::new));
+        return ResponseEntity.ok(accountService.findById(accountId).orElseThrow(InvalidAccountIdException::new));
     }
 
     @GetMapping("/accounts/search")

@@ -41,7 +41,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public Optional<Location> find(Long aLong) {
+    public Optional<Location> findById(Long aLong) {
         return Optional.empty();
     }
 

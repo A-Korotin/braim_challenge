@@ -8,7 +8,7 @@ public interface CrudService<T, ID> {
     T save(Dto<T> dto);
     T update(ID id, Dto<T> dto);
     void delete(ID id);
-    Optional<T> find(ID id);
+    Optional<T> findById(ID id);
     Iterable<T> findAll();
     boolean existsById(ID id);
 }
