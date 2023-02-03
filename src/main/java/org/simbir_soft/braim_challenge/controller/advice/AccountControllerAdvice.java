@@ -23,4 +23,10 @@ public class AccountControllerAdvice {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<?> handle(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().build();
+    }
+
 }
