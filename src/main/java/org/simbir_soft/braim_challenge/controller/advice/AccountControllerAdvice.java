@@ -1,5 +1,6 @@
 package org.simbir_soft.braim_challenge.controller.advice;
 
+import org.simbir_soft.braim_challenge.exception.InvalidAccountIdException;
 import org.simbir_soft.braim_challenge.exception.NonUniqueEmailException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,11 @@ public class AccountControllerAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> handle(IllegalArgumentException e) {
         return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(InvalidAccountIdException.class)
+    public ResponseEntity<?> notFound(InvalidAccountIdException e) {
+        return ResponseEntity.notFound().build();
     }
 
 }

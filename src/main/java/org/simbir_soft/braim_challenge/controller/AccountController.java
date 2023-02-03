@@ -32,7 +32,7 @@ public class AccountController {
 
     @PutMapping("/accounts/{accountId}")
     public ResponseEntity<?> updateAccount(@Valid @RequestBody AccountDto accountDto,
-                                           @PathVariable Long accountId) {
+                                           @Min(value = 1) @PathVariable Long accountId) {
 
         return ResponseEntity.ok(accountService.update(accountId, accountDto));
 
