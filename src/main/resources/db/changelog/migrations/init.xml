@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+    <changeSet id="" author="Alexey Korotin">
+        <sql dbms="postgresql"
+             endDelimiter=";"
+             splitStatements="true"
+             stripComments="true">
+
+        CREATE TABLE user_account(
+            id BIGINT NOT NULL,
+            firstName TEXT NOT NULL,
+            lastName TEXT NOT NULL,
+            email TEXT NOT NULL,
+            password TEXT NOT NULL,
+
+            CONSTRAINT pk_user_account PRIMARY KEY (id)
+        );
+
+        ALTER TABLE user_account
+            ADD CONSTRAINT uc_user_email UNIQUE (email);
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

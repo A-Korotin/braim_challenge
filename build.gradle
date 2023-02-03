@@ -24,11 +24,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator
     implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '8.0.0.Final'
+    implementation 'org.liquibase:liquibase-core'
 
     compileOnly 'org.projectlombok:lombok'
-    // runtimeOnly 'org.postgresql:postgresql'
-    // https://mvnrepository.com/artifact/com.h2database/h2
-    runtimeOnly group: 'com.h2database', name: 'h2', version: '2.1.214'
+    runtimeOnly 'org.postgresql:postgresql'
 
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
