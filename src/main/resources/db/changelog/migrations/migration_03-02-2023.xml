@@ -9,19 +9,13 @@
              endDelimiter=";"
              splitStatements="true"
              stripComments="true">
+            CREATE TABLE IF NOT EXISTS location (
+                id BIGSERIAL,
+                latitude  DOUBLE PRECISION NOT NULL,
+                longitude DOUBLE PRECISION NOT NULL,
 
-        CREATE TABLE IF NOT EXISTS user_account (
-            id BIGSERIAL NOT NULL,
-            first_name TEXT NOT NULL,
-            last_name TEXT NOT NULL,
-            email TEXT NOT NULL,
-            password TEXT NOT NULL,
-
-            CONSTRAINT pk_user_account PRIMARY KEY (id)
-        );
-
-        ALTER TABLE user_account
-            ADD CONSTRAINT uc_user_email UNIQUE (email);
+                CONSTRAINT pk_locations PRIMARY KEY (id)
+            );
 
         </sql>
     </changeSet>

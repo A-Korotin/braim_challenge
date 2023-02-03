@@ -7,4 +7,5 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
 
     <include file="migrations/init.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/migration_03-02-2023.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
