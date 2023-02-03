@@ -1,5 +1,6 @@
 package org.simbir_soft.braim_challenge.config;
 
+import org.simbir_soft.braim_challenge.config.handler.CustomAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
@@ -43,11 +45,20 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .requestMatchers("/registration").permitAll()
+                .requestMatchers("/registration").anonymous()
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling()
+                    .accessDeniedHandler(customAccessDeniedHandler())
                 .and()
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
+    }
+
+    @Bean
+    public AccessDeniedHandler customAccessDeniedHandler(){
+        return new CustomAccessDeniedHandler();
     }
 
 }
