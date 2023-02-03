@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Location;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
+import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.repository.LocationRepository;
 import org.simbir_soft.braim_challenge.service.LocationService;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,12 @@ public class LocationServiceImpl implements LocationService {
         }
     }
 
+    private void checkId(Long id) {
+        if (!locationRepository.existsById(id)) {
+            throw new DataMissingException();
+        }
+    }
+
     @Override
     public Location save(Dto<Location> dto) {
         Location location = dto.fromDto();
@@ -32,26 +39,31 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     public Location update(Long id, Dto<Location> dto) {
-        return null;
+        checkId(id);
+        Location location = dto.fromDto();
+        checkUnique(location);
+        location.setId(id);
+        return locationRepository.save(location);
     }
 
     @Override
-    public void delete(Long aLong) {
-
+    public void delete(Long id) {
+        checkId(id);
+        locationRepository.deleteById(id);
     }
 
     @Override
-    public Optional<Location> findById(Long aLong) {
-        return Optional.empty();
+    public Optional<Location> findById(Long id) {
+        return locationRepository.findById(id);
     }
 
     @Override
     public Iterable<Location> findAll() {
-        return null;
+        return locationRepository.findAll();
     }
 
     @Override
-    public boolean existsById(Long aLong) {
-        return false;
+    public boolean existsById(Long id) {
+        return locationRepository.existsById(id);
     }
 }
