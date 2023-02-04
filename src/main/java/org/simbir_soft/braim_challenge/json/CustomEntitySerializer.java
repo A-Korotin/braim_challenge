@@ -1,4 +1,4 @@
-package org.simbir_soft.braim_challenge.jsonSerializer;
+package org.simbir_soft.braim_challenge.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
