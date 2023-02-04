@@ -58,6 +58,15 @@ public class AnimalTypeServiceImpl implements AnimalTypeService {
     }
 
     @Override
+    public Iterable<AnimalType> findAllById(Iterable<Long> ids) {
+        Iterable<AnimalType> types = animalTypeRepository.findAllById(ids);
+        if (types.spliterator().getExactSizeIfKnown() != ids.spliterator().getExactSizeIfKnown()) {
+            throw new DataMissingException();
+        }
+        return animalTypeRepository.findAllById(ids);
+    }
+
+    @Override
     public Iterable<AnimalType> findAll() {
         return animalTypeRepository.findAll();
     }

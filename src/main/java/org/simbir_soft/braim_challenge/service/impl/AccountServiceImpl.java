@@ -104,6 +104,16 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
+    public Iterable<Account> findAllById(Iterable<Long> ids) {
+        Iterable<Account> accounts = repository.findAllById(ids);
+
+        if (accounts.spliterator().getExactSizeIfKnown() != accounts.spliterator().getExactSizeIfKnown()) {
+            throw new DataMissingException();
+        }
+        return accounts;
+    }
+
+    @Override
     public Iterable<Account> findAll() {
         return repository.findAll();
     }
