@@ -1,6 +1,5 @@
 package org.simbir_soft.braim_challenge.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
@@ -8,8 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.simbir_soft.braim_challenge.jsonSerializer.CustomEntitySerializer;
-import org.simbir_soft.braim_challenge.jsonSerializer.CustomEntityListSerializer;
+import org.simbir_soft.braim_challenge.json.CustomEntityListSerializer;
+import org.simbir_soft.braim_challenge.json.CustomEntitySerializer;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -77,7 +76,8 @@ public class Animal extends BaseEntity {
             joinColumns = @JoinColumn(name = "animal_id"),
             inverseJoinColumns = @JoinColumn(name = "location_id")
     )
-    private List<Location> visitedLocations;
+    @Builder.Default
+    private List<Location> visitedLocations = new ArrayList<>();
 
     private LocalDateTime deathDateTime = null;
 }

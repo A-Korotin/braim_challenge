@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class AnimalDto extends Dto<Animal> {
 
     @NotEmpty
-    private List<@Min(value = 1) Long> animalTypes;
+    private List<@NotNull @Min(value = 1) Long> animalTypes;
 
     @NotNull
     @DecimalMin(value = "0.0000000001")
@@ -35,11 +35,13 @@ public class AnimalDto extends Dto<Animal> {
     @NotNull
     private Animal.Gender gender;
 
+    @NotNull
     @Min(value = 1)
     private Long chipperId;
 
+    @NotNull
     @Min(value = 1)
-    private long chippingLocationId;
+    private Long chippingLocationId;
 
     @Override
     public Animal fromDto() {
