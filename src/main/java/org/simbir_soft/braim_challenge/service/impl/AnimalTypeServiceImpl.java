@@ -41,7 +41,7 @@ public class AnimalTypeServiceImpl implements AnimalTypeService {
         checkId(id);
         AnimalType type = dto.fromDto();
         checkUnique(type);
-
+        type.setId(id);
         return animalTypeRepository.save(type);
     }
 
