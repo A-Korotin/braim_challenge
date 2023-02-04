@@ -3,7 +3,6 @@ package org.simbir_soft.braim_challenge.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Animal;
 import org.simbir_soft.braim_challenge.domain.AnimalType;
-import org.simbir_soft.braim_challenge.domain.Location;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.repository.AnimalRepository;
@@ -12,7 +11,6 @@ import org.simbir_soft.braim_challenge.service.AnimalService;
 import org.simbir_soft.braim_challenge.service.AnimalTypeService;
 import org.simbir_soft.braim_challenge.service.LocationService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -65,13 +63,17 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public Optional<Animal> findById(Long aLong) {
-        return Optional.empty();
+    public Optional<Animal> findById(Long id) {
+        return animalRepository.findById(id);
     }
 
     @Override
-    public Iterable<Animal> findAllById(Iterable<Long> longs) {
-        return null;
+    public Iterable<Animal> findAllById(Iterable<Long> ids) {
+        Iterable<Animal> animals = animalRepository.findAllById(ids);
+        if (animals.spliterator().getExactSizeIfKnown() != ids.spliterator().getExactSizeIfKnown()) {
+            throw new DataMissingException();
+        }
+        return animals;
     }
 
     @Override

@@ -35,6 +35,8 @@ public class AnimalDto extends Dto<Animal> {
     @NotNull
     private Animal.Gender gender;
 
+    private Animal.LifeStatus lifeStatus;
+
     @NotNull
     @Min(value = 1)
     private Long chipperId;
@@ -60,6 +62,7 @@ public class AnimalDto extends Dto<Animal> {
                 .height(height)
                 .length(length)
                 .gender(gender)
+                .lifeStatus(lifeStatus)
                 .chipper(chipper)
                 .chippingLocation(chippingLocation)
                 .build();
