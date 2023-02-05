@@ -17,9 +17,15 @@ public class GeneralControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handle(MethodArgumentNotValidException e) {
+        e.printStackTrace();
         return ResponseEntity.badRequest().build();
     }
 
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<?> handle(MethodArgumentTypeMismatchException e) {
+        e.printStackTrace();
+        return ResponseEntity.badRequest().build();
+    }
 
     @ExceptionHandler(DataConflictException.class)
     public ResponseEntity<?> conflict(DataConflictException e) {
@@ -28,21 +34,25 @@ public class GeneralControllerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<?> handle(ConstraintViolationException e) {
+        e.printStackTrace();
         return ResponseEntity.badRequest().build();
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handle(HttpMessageNotReadableException e) {
+        e.printStackTrace();
         return ResponseEntity.badRequest().build();
     }
 
     @ExceptionHandler(DataMissingException.class)
     public ResponseEntity<?> notFound(DataMissingException e) {
+        e.printStackTrace();
         return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler(AccessForbiddenException.class)
     public ResponseEntity<?> forbidden(AccessForbiddenException e) {
+        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }

@@ -37,7 +37,9 @@ public class AnimalController {
                                            @RequestParam Animal.Gender gender,
                                            @RequestParam(defaultValue = "0") @Min(value = 0) Long from,
                                            @RequestParam(defaultValue = "10") @Min(value = 1) Long size) {
-        List<Animal> filtered = StreamSupport.stream(animalService.findAll().spliterator(), false)
+        Iterable<Animal> iterable = animalService.findAll();
+        System.out.println(iterable);
+        List<Animal> filtered = StreamSupport.stream(iterable.spliterator(), false)
                 .filter(a -> a.getChippingDateTime().isAfter(startDateTime))
                 .filter(a -> a.getChippingDateTime().isBefore(endDateTime))
                 .filter(a -> a.getChipper().getId().equals(chipperId))
@@ -55,4 +57,13 @@ public class AnimalController {
         System.out.println(animalDto);
         return ResponseEntity.ok(animalService.save(animalDto));
     }
+
+    @PutMapping("/{animalId}")
+    public ResponseEntity<?> updateAnimal(@PathVariable @Min(value = 1) Long animalId,
+                                          @Valid @RequestBody AnimalDto animalDto) {
+
+        return ResponseEntity.ok(animalService.update(animalId, animalDto));
+    }
+
+
 }

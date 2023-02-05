@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Animal;
 import org.simbir_soft.braim_challenge.domain.AnimalType;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
+import org.simbir_soft.braim_challenge.exception.DataInvalidException;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.repository.AnimalRepository;
 import org.simbir_soft.braim_challenge.service.AccountService;
@@ -43,6 +44,32 @@ public class AnimalServiceImpl implements AnimalService {
         animal.setChippingLocation(locationService.findById(chippingLocationId).orElseThrow(DataMissingException::new));
     }
 
+    private Animal loadAnimal(Long id) {
+        return animalRepository.findById(id).orElseThrow(DataMissingException::new);
+    }
+
+    private void checkUpdate(Animal oldAnimal, Animal newAnimal) {
+        if (oldAnimal.getLifeStatus().equals(Animal.LifeStatus.DEAD) &&
+                newAnimal.getLifeStatus().equals(Animal.LifeStatus.ALIVE)) {
+            throw new DataInvalidException();
+        }
+        if (oldAnimal.getVisitedLocations().size() == 0) {
+            return;
+        }
+
+        if (oldAnimal.getVisitedLocations().get(0).equals(newAnimal.getChippingLocation())) {
+            throw new DataInvalidException();
+        }
+    }
+
+    private void preformUpdate(Animal oldAnimal, Animal newAnimal) {
+        newAnimal.setId(oldAnimal.getId());
+        newAnimal.setVisitedLocations(oldAnimal.getVisitedLocations());
+        if (newAnimal.getLifeStatus().equals(Animal.LifeStatus.DEAD)) {
+            newAnimal.setDeathDateTime(LocalDateTime.now());
+        }
+    }
+
     @Override
     public Animal save(Dto<Animal> dto) {
         Animal animal = dto.fromDto();
@@ -53,13 +80,21 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public Animal update(Long aLong, Dto<Animal> dto) {
-        return null;
+    public Animal update(Long id, Dto<Animal> dto) {
+        Animal oldAnimal = loadAnimal(id);
+        Animal newAnimal = dto.fromDto();
+        fillDummyFields(newAnimal);
+        checkUpdate(oldAnimal, newAnimal);
+        preformUpdate(oldAnimal, newAnimal);
+
+        return animalRepository.save(newAnimal);
     }
 
     @Override
-    public void delete(Long aLong) {
-
+    public void delete(Long id) {
+        Animal animal = loadAnimal(id);
+        // TODO: 05.02.2023 preform check
+        animalRepository.deleteById(id);
     }
 
     @Override
@@ -78,11 +113,11 @@ public class AnimalServiceImpl implements AnimalService {
 
     @Override
     public Iterable<Animal> findAll() {
-        return null;
+        return animalRepository.findAll();
     }
 
     @Override
-    public boolean existsById(Long aLong) {
-        return false;
+    public boolean existsById(Long id) {
+        return animalRepository.existsById(id);
     }
 }
