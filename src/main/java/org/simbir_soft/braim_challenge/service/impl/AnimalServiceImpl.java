@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Animal;
 import org.simbir_soft.braim_challenge.domain.AnimalType;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
+import org.simbir_soft.braim_challenge.exception.DataConflictException;
 import org.simbir_soft.braim_challenge.exception.DataInvalidException;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.repository.AnimalRepository;
@@ -46,6 +47,10 @@ public class AnimalServiceImpl implements AnimalService {
 
     private Animal loadAnimal(Long id) {
         return animalRepository.findById(id).orElseThrow(DataMissingException::new);
+    }
+
+    private AnimalType loadType(Long id) {
+        return animalTypeService.findById(id).orElseThrow(DataMissingException::new);
     }
 
     private void checkUpdate(Animal oldAnimal, Animal newAnimal) {
@@ -119,5 +124,52 @@ public class AnimalServiceImpl implements AnimalService {
     @Override
     public boolean existsById(Long id) {
         return animalRepository.existsById(id);
+    }
+
+
+    @Override
+    public Animal addTypeById(Long animalId, Long typeId) {
+        Animal animal = loadAnimal(animalId);
+        AnimalType animalType = loadType(typeId);
+        animal.getAnimalTypes().add(animalType);
+        return animalRepository.save(animal);
+    }
+
+    private boolean animalHasType(Animal animal, Long typeId) {
+        return animal.getAnimalTypes().stream().anyMatch(t -> t.getId().equals(typeId));
+    }
+    private void performReplace(Animal animal, Long oldTypeId, Long newTypeId) {
+        List<AnimalType> replacedTypeList = animal.getAnimalTypes().stream()
+                .map(t -> t.getId().equals(oldTypeId)? loadType(newTypeId): t)
+                .collect(Collectors.toList());
+
+        animal.setAnimalTypes(replacedTypeList);
+    }
+
+    @Override
+    public Animal editTypeById(Long animalId, Long oldTypeId, Long newTypeId) {
+        Animal animal = loadAnimal(animalId);
+        if (!animalHasType(animal, oldTypeId)) {
+            throw new DataMissingException();
+        }
+        if (animalHasType(animal, newTypeId)) {
+            throw new DataConflictException();
+        }
+
+        performReplace(animal, oldTypeId, newTypeId);
+
+        return animalRepository.save(animal);
+    }
+
+    @Override
+    public Animal deleteTypeById(Long animalId, Long typeId) {
+        Animal animal = loadAnimal(animalId);
+
+        if (!animalTypeService.existsById(typeId) ||
+                !animalHasType(animal, typeId)) {
+            throw new DataMissingException();
+        }
+        animal.getAnimalTypes().removeIf(t -> t.getId().equals(typeId));
+        return animalRepository.save(animal);
     }
 }

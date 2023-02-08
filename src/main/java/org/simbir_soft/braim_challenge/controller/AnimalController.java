@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Animal;
 import org.simbir_soft.braim_challenge.domain.dto.AnimalDto;
+import org.simbir_soft.braim_challenge.domain.dto.EditAnimalTypeDto;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.service.AnimalService;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,6 @@ public class AnimalController {
 
     @PostMapping
     public ResponseEntity<?> createAnimal(@Valid @RequestBody AnimalDto animalDto) {
-        System.out.println(animalDto);
         return ResponseEntity.ok(animalService.save(animalDto));
     }
 
@@ -65,5 +65,22 @@ public class AnimalController {
         return ResponseEntity.ok(animalService.update(animalId, animalDto));
     }
 
+    @PostMapping("/{animalId}/types/{typeId}")
+    public ResponseEntity<?> addAnimalType(@PathVariable @Min(value = 1) Long animalId,
+                                           @PathVariable @Min(value = 1) Long typeId) {
+        return ResponseEntity.ok(animalService.addTypeById(animalId, typeId));
+    }
+
+    @PutMapping("/{animalId}/types")
+    public ResponseEntity<?> editAnimalType(@PathVariable @Min(value = 1) Long animalId,
+                                            @Valid @RequestBody EditAnimalTypeDto dto) {
+        return ResponseEntity.ok(animalService.editTypeById(animalId, dto.getOldTypeId(), dto.getNewTypeId()));
+    }
+
+    @DeleteMapping("/{animalId}/types/{typeId}")
+    public ResponseEntity<?> deleteAnimalType(@PathVariable @Min(value = 1) Long animalId,
+                                              @PathVariable @Min(value = 1) Long typeId) {
+        return ResponseEntity.ok(animalService.deleteTypeById(animalId, typeId));
+    }
 
 }

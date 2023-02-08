@@ -7,8 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.simbir_soft.braim_challenge.json.CustomEntityListSerializer;
-import org.simbir_soft.braim_challenge.json.CustomEntitySerializer;
+import org.simbir_soft.braim_challenge.json.serializer.CustomEntityListSerializer;
+import org.simbir_soft.braim_challenge.json.serializer.CustomEntitySerializer;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
