@@ -20,12 +20,12 @@ public class LocationDto extends Dto<Location> {
                 .build();
     }
     @NotNull
-    @DecimalMin("-89.9999999999")
-    @DecimalMax("89.99999999999")
+    @DecimalMin("-90")
+    @DecimalMax("90")
     private BigDecimal latitude;
 
     @NotNull
-    @DecimalMin("-179.9999999999")
-    @DecimalMax("179.99999999999")
+    @DecimalMin("-180")
+    @DecimalMax("180")
     private BigDecimal longitude;
 }

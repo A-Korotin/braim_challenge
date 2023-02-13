@@ -18,7 +18,7 @@ services:
 
   # Сервис для разворачивания контейнера с приложением
   webapi:
-    image: janill/braim:second
+    image: janill/braim:latest
     ports:
       - "8080:8080"
     depends_on:

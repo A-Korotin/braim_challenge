@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface AnimalTypeRepository extends CrudRepository<AnimalType, Long> {
-    boolean existsByName(String name);
+    boolean existsByType(String type);
 
     @Query(nativeQuery = true,
             value = "SELECT COUNT(*) > 0 FROM animal_type_relation WHERE animal_type_id = ?")

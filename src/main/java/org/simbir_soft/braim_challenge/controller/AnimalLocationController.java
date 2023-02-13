@@ -45,7 +45,7 @@ public class AnimalLocationController {
     @PostMapping("/{pointId}")
     public ResponseEntity<?> addLocation(@PathVariable @Min(value = 1) Long animalId,
                                          @PathVariable @Min(value = 1) Long pointId) {
-        return ResponseEntity.ok(service.addLocationById(animalId, pointId));
+        return ResponseEntity.status(201).body(service.addLocationById(animalId, pointId));
     }
 
     @PutMapping
