@@ -3,6 +3,8 @@ package org.simbir_soft.braim_challenge.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Animal;
 import org.simbir_soft.braim_challenge.domain.AnimalType;
+import org.simbir_soft.braim_challenge.domain.Location;
+import org.simbir_soft.braim_challenge.domain.TimedLocation;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
 import org.simbir_soft.braim_challenge.exception.DataInvalidException;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,6 +33,10 @@ public class AnimalServiceImpl implements AnimalService {
     private final AnimalTypeService animalTypeService;
 
     private void fillDummyFields(Animal animal) {
+        if (animal.getAnimalTypes().stream().distinct().count() != animal.getAnimalTypes().size()) { // contains duplicates
+            throw new DataConflictException();
+        }
+
         List<AnimalType> validTypes = new ArrayList<>(animal.getAnimalTypes().size());
         animalTypeService
                 .findAllById(animal.getAnimalTypes().stream()
@@ -46,7 +53,9 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     private Animal loadAnimal(Long id) {
-        return animalRepository.findById(id).orElseThrow(DataMissingException::new);
+        Animal animal = animalRepository.findById(id).orElseThrow(DataMissingException::new);
+        animal.getVisitedLocations().sort(Comparator.comparing(TimedLocation::getVisitTime));
+        return animal;
     }
 
     private AnimalType loadType(Long id) {
@@ -58,11 +67,8 @@ public class AnimalServiceImpl implements AnimalService {
                 newAnimal.getLifeStatus().equals(Animal.LifeStatus.ALIVE)) {
             throw new DataInvalidException();
         }
-        if (oldAnimal.getVisitedLocations().size() == 0) {
-            return;
-        }
-
-        if (oldAnimal.getVisitedLocations().get(0).equals(newAnimal.getChippingLocation())) {
+        if (oldAnimal.getVisitedLocations().size() > 0 &&
+            oldAnimal.getVisitedLocations().get(0).getLocation().equals(newAnimal.getChippingLocation())) {
             throw new DataInvalidException();
         }
     }
@@ -73,6 +79,8 @@ public class AnimalServiceImpl implements AnimalService {
         if (newAnimal.getLifeStatus().equals(Animal.LifeStatus.DEAD)) {
             newAnimal.setDeathDateTime(LocalDateTime.now());
         }
+        newAnimal.setChippingDateTime(oldAnimal.getChippingDateTime());
+        newAnimal.setAnimalTypes(oldAnimal.getAnimalTypes());
     }
 
     @Override
@@ -95,16 +103,30 @@ public class AnimalServiceImpl implements AnimalService {
         return animalRepository.save(newAnimal);
     }
 
+    private boolean animalLeftChippingLocation(Animal animal) {
+        int size = animal.getVisitedLocations().size();
+        return size > 0 &&
+                !animal.getVisitedLocations().get(size - 1).getLocation()
+                        .equals(animal.getChippingLocation()); // last location is not a chipping location
+    }
+
     @Override
     public void delete(Long id) {
         Animal animal = loadAnimal(id);
-        // TODO: 05.02.2023 preform check
+        if (animalLeftChippingLocation(animal)) {
+            throw new DataInvalidException();
+        }
         animalRepository.deleteById(id);
     }
 
     @Override
     public Optional<Animal> findById(Long id) {
         return animalRepository.findById(id);
+    }
+
+    @Override
+    public Animal findByIdOrThrowException(Long id) {
+        return loadAnimal(id);
     }
 
     @Override
@@ -126,18 +148,23 @@ public class AnimalServiceImpl implements AnimalService {
         return animalRepository.existsById(id);
     }
 
+    private boolean animalHasType(Animal animal, Long typeId) {
+        return animal.getAnimalTypes().stream().anyMatch(t -> t.getId().equals(typeId));
+    }
 
     @Override
     public Animal addTypeById(Long animalId, Long typeId) {
         Animal animal = loadAnimal(animalId);
         AnimalType animalType = loadType(typeId);
+
+        if (animalHasType(animal, typeId)) {
+            throw new DataConflictException();
+        }
+
         animal.getAnimalTypes().add(animalType);
         return animalRepository.save(animal);
     }
 
-    private boolean animalHasType(Animal animal, Long typeId) {
-        return animal.getAnimalTypes().stream().anyMatch(t -> t.getId().equals(typeId));
-    }
     private void performReplace(Animal animal, Long oldTypeId, Long newTypeId) {
         List<AnimalType> replacedTypeList = animal.getAnimalTypes().stream()
                 .map(t -> t.getId().equals(oldTypeId)? loadType(newTypeId): t)

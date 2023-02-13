@@ -35,7 +35,6 @@ public class AnimalTypeController {
 
     @DeleteMapping("/{typeId}")
     public ResponseEntity<?> deleteType(@PathVariable @Min(value = 1) Long typeId) {
-        // TODO: 04.02.2023 animal owns this type 
         animalTypeService.delete(typeId);
         return ResponseEntity.ok().build();
     }

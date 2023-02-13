@@ -3,12 +3,10 @@ package org.simbir_soft.braim_challenge.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.simbir_soft.braim_challenge.json.serializer.CustomEntityListSerializer;
 import org.simbir_soft.braim_challenge.json.serializer.CustomEntitySerializer;
+import org.simbir_soft.braim_challenge.json.serializer.TimedLocationListSerializer;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -41,6 +40,7 @@ public class Animal extends BaseEntity {
             joinColumns = @JoinColumn(name = "animal_id"),
             inverseJoinColumns = @JoinColumn(name = "animal_type_id")
     )
+    @Builder.Default
     private List<AnimalType> animalTypes = new ArrayList<>();
 
     private BigDecimal weight;
@@ -69,15 +69,11 @@ public class Animal extends BaseEntity {
     @JoinColumn(name = "chipping_location_id")
     private Location chippingLocation;
 
-    @JsonSerialize(using = CustomEntityListSerializer.class)
-    @ManyToMany
-    @JoinTable(
-            name = "animal_location_relation",
-            joinColumns = @JoinColumn(name = "animal_id"),
-            inverseJoinColumns = @JoinColumn(name = "location_id")
-    )
+    @JsonSerialize(using = TimedLocationListSerializer.class)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
+    @JoinColumn(name = "animal_id")
     @Builder.Default
-    private List<Location> visitedLocations = new ArrayList<>();
+    private List<TimedLocation> visitedLocations = new ArrayList<>();
 
     private LocalDateTime deathDateTime = null;
 }
