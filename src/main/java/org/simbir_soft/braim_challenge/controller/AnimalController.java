@@ -57,7 +57,7 @@ public class AnimalController {
 
     @PostMapping
     public ResponseEntity<?> createAnimal(@Valid @RequestBody AnimalDto animalDto) {
-        return ResponseEntity.ok(animalService.save(animalDto));
+        return ResponseEntity.status(201).body(animalService.save(animalDto));
     }
 
     @PutMapping("/{animalId}")

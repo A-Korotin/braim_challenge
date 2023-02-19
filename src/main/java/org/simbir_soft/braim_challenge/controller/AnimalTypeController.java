@@ -24,7 +24,7 @@ public class AnimalTypeController {
 
     @PostMapping
     public ResponseEntity<?> createType(@Valid @RequestBody AnimalTypeDto animalTypeDto) {
-        return ResponseEntity.ok(animalTypeService.save(animalTypeDto));
+        return ResponseEntity.status(201).body(animalTypeService.save(animalTypeDto));
     }
 
     @PutMapping("/{typeId}")

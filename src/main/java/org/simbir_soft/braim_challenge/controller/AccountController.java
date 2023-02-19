@@ -29,7 +29,7 @@ public class AccountController {
     public ResponseEntity<?> registerAccount(@Valid @RequestBody AccountDto accountDto) {
         Account account = accountService.save(accountDto);
 
-        return ResponseEntity.ok(account);
+        return ResponseEntity.status(201).body(account);
     }
 
     @PutMapping("/accounts/{accountId}")
@@ -47,9 +47,9 @@ public class AccountController {
     }
 
     @GetMapping("/accounts/search")
-    public ResponseEntity<?> searchAccounts(@RequestParam String firstName,
-                                            @RequestParam String lastName,
-                                            @RequestParam String email,
+    public ResponseEntity<?> searchAccounts(@RequestParam(defaultValue = "") String firstName,
+                                            @RequestParam(defaultValue = "") String lastName,
+                                            @RequestParam(defaultValue = "") String email,
                                             @RequestParam(defaultValue = "0")  @NotNull @Min(value = 0)  Long from,
                                             @RequestParam(defaultValue = "10") @NotNull @Min(value = 1) Long size) {
 
