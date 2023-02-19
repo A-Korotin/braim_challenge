@@ -2,7 +2,6 @@ package org.simbir_soft.braim_challenge.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.AnimalType;
-import org.simbir_soft.braim_challenge.domain.dto.AnimalTypeDto;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
 import org.simbir_soft.braim_challenge.exception.DataInvalidException;
@@ -19,7 +18,7 @@ public class AnimalTypeServiceImpl implements AnimalTypeService {
     private final AnimalTypeRepository animalTypeRepository;
 
     private void checkUnique(AnimalType type) {
-        if (animalTypeRepository.existsByName(type.getName())) {
+        if (animalTypeRepository.existsByType(type.getType())) {
             throw new DataConflictException();
         }
     }

@@ -21,7 +21,7 @@ public class LocationController {
 
     @PostMapping
     public ResponseEntity<?> createLocation(@Valid @RequestBody LocationDto locationDto) {
-        return ResponseEntity.ok(locationService.save(locationDto));
+        return ResponseEntity.status(201).body(locationService.save(locationDto));
     }
 
     @GetMapping("/{locationId}")
