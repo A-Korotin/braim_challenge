@@ -17,5 +17,5 @@ import lombok.NoArgsConstructor;
 @Table(name = "animal_type")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class AnimalType extends BaseEntity {
-    private String name;
+    private String type;
 }

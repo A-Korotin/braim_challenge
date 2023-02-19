@@ -9,10 +9,10 @@ import org.simbir_soft.braim_challenge.domain.AnimalType;
 public class AnimalTypeDto extends Dto<AnimalType> {
     @Override
     public AnimalType fromDto() {
-        return new AnimalType(name);
+        return new AnimalType(type);
     }
 
     @NotNull
     @NotBlank
-    private String name;
+    private String type;
 }

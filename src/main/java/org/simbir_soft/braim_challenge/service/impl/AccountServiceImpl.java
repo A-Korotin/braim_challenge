@@ -72,8 +72,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public Account update(Long id, Dto<Account> dto) {
-        checkId(id);
         checkIfCurrentUserIsAllowedToModify(id);
+        checkId(id);
 
         Account dtoAccount = dto.fromDto();
         checkEmailById(id, dtoAccount.getEmail());
