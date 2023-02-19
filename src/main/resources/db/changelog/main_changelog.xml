@@ -9,4 +9,7 @@
     <include file="migrations/init.xml" relativeToChangelogFile="true"/>
     <include file="migrations/migration_03-02-2023-Location.xml" relativeToChangelogFile="true"/>
     <include file="migrations/migration_03-02-2023-AnimalType.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/migration_04-02-2023-Animal.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/migration_04-02-2023-Relationships.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/migration_09-02-2023-Location_Time.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

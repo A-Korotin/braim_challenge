@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+    <changeSet id="" author="Alexey Korotin">
+        <sql dbms="postgresql"
+             endDelimiter=";"
+             splitStatements="true"
+             stripComments="true">
+            CREATE TABLE IF NOT EXISTS animal (
+                id BIGSERIAL,
+                weight FLOAT NOT NULL,
+                length FLOAT NOT NULL,
+                height FLOAT NOT NULL,
+                gender TEXT NOT NULL,
+                life_status TEXT NOT NULL,
+                chipping_date_time TIMESTAMP NOT NULL,
+                chipper_id BIGINT NOT NULL,
+                chipping_location_id BIGINT NOT NULL,
+                death_date_time TIMESTAMP,
+
+                CONSTRAINT pk_animal PRIMARY  KEY (id)
+            );
+
+            ALTER TABLE animal
+                ADD CONSTRAINT FK_ANIMAL_ON_USER_ACCOUNT FOREIGN KEY (chipper_id) REFERENCES user_account (id);
+
+            ALTER TABLE animal
+                ADD CONSTRAINT FK_ANIMAL_ON_LOCATION FOREIGN KEY (chipping_location_id) REFERENCES location (id);
+
+
+
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

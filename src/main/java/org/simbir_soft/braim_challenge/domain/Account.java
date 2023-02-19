@@ -9,6 +9,7 @@ import lombok.*;
 import org.simbir_soft.braim_challenge.domain.dto.AccountDto;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

@@ -58,6 +58,15 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    public Iterable<Location> findAllById(Iterable<Long> ids) {
+        Iterable<Location> locations = locationRepository.findAllById(ids);
+        if (locations.spliterator().getExactSizeIfKnown() != ids.spliterator().getExactSizeIfKnown()) {
+            throw new DataMissingException();
+        }
+        return locationRepository.findAllById(ids);
+    }
+
+    @Override
     public Iterable<Location> findAll() {
         return locationRepository.findAll();
     }

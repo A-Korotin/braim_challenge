@@ -5,6 +5,7 @@ import org.simbir_soft.braim_challenge.domain.AnimalType;
 import org.simbir_soft.braim_challenge.domain.dto.AnimalTypeDto;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
+import org.simbir_soft.braim_challenge.exception.DataInvalidException;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.repository.AnimalTypeRepository;
 import org.simbir_soft.braim_challenge.service.AnimalTypeService;
@@ -48,6 +49,9 @@ public class AnimalTypeServiceImpl implements AnimalTypeService {
     @Override
     public void delete(Long id) {
         checkId(id);
+        if (animalWithTypeExists(id)) {
+            throw new DataInvalidException();
+        }
 
         animalTypeRepository.deleteById(id);
     }
@@ -58,6 +62,15 @@ public class AnimalTypeServiceImpl implements AnimalTypeService {
     }
 
     @Override
+    public Iterable<AnimalType> findAllById(Iterable<Long> ids) {
+        Iterable<AnimalType> types = animalTypeRepository.findAllById(ids);
+        if (types.spliterator().getExactSizeIfKnown() != ids.spliterator().getExactSizeIfKnown()) {
+            throw new DataMissingException();
+        }
+        return animalTypeRepository.findAllById(ids);
+    }
+
+    @Override
     public Iterable<AnimalType> findAll() {
         return animalTypeRepository.findAll();
     }
@@ -65,5 +78,10 @@ public class AnimalTypeServiceImpl implements AnimalTypeService {
     @Override
     public boolean existsById(Long id) {
         return animalTypeRepository.existsById(id);
+    }
+
+    @Override
+    public boolean animalWithTypeExists(Long typeId) {
+        return animalTypeRepository.animalWithTypeExists(typeId);
     }
 }
