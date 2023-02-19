@@ -8,13 +8,12 @@ import org.simbir_soft.braim_challenge.domain.BaseEntity;
 import org.simbir_soft.braim_challenge.domain.dto.AnimalDto;
 import org.simbir_soft.braim_challenge.domain.dto.EditAnimalDto;
 import org.simbir_soft.braim_challenge.domain.dto.EditAnimalTypeDto;
-import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.service.AnimalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,8 +32,8 @@ public class AnimalController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchAnimals(@RequestParam(required = false) LocalDateTime startDateTime,
-                                           @RequestParam(required = false) LocalDateTime endDateTime,
+    public ResponseEntity<?> searchAnimals(@RequestParam(required = false) ZonedDateTime startDateTime,
+                                           @RequestParam(required = false) ZonedDateTime endDateTime,
                                            @RequestParam(required = false) @Min(value = 1) Long chipperId,
                                            @RequestParam(required = false) @Min(value = 1) Long chippingLocationId,
                                            @RequestParam(required = false) Animal.LifeStatus lifeStatus,

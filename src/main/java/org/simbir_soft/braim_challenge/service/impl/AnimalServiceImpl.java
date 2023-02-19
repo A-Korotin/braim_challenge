@@ -3,7 +3,6 @@ package org.simbir_soft.braim_challenge.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Animal;
 import org.simbir_soft.braim_challenge.domain.AnimalType;
-import org.simbir_soft.braim_challenge.domain.Location;
 import org.simbir_soft.braim_challenge.domain.TimedLocation;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
@@ -16,7 +15,7 @@ import org.simbir_soft.braim_challenge.service.AnimalTypeService;
 import org.simbir_soft.braim_challenge.service.LocationService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -77,7 +76,7 @@ public class AnimalServiceImpl implements AnimalService {
         newAnimal.setId(oldAnimal.getId());
         newAnimal.setVisitedLocations(oldAnimal.getVisitedLocations());
         if (newAnimal.getLifeStatus().equals(Animal.LifeStatus.DEAD)) {
-            newAnimal.setDeathDateTime(LocalDateTime.now());
+            newAnimal.setDeathDateTime(ZonedDateTime.now());
         }
         newAnimal.setChippingDateTime(oldAnimal.getChippingDateTime());
         newAnimal.setAnimalTypes(oldAnimal.getAnimalTypes());
@@ -88,7 +87,7 @@ public class AnimalServiceImpl implements AnimalService {
         Animal animal = dto.fromDto();
         fillDummyFields(animal);
         animal.setLifeStatus(Animal.LifeStatus.ALIVE);
-        animal.setChippingDateTime(LocalDateTime.now());
+        animal.setChippingDateTime(ZonedDateTime.now());
         return animalRepository.save(animal);
     }
 

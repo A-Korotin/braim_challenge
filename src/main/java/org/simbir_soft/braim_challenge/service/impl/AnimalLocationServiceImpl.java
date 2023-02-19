@@ -1,6 +1,5 @@
 package org.simbir_soft.braim_challenge.service.impl;
 
-import jakarta.persistence.Index;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Animal;
 import org.simbir_soft.braim_challenge.domain.Location;
@@ -14,7 +13,7 @@ import org.simbir_soft.braim_challenge.service.AnimalService;
 import org.simbir_soft.braim_challenge.service.LocationService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,7 +51,7 @@ public class AnimalLocationServiceImpl implements AnimalLocationService {
         Animal animal = animalService.findByIdOrThrowException(animalId);
         checkAdd(animal, locationId);
         Location location = loadLocation(locationId);
-        TimedLocation timedLocation = new TimedLocation(location, animal, LocalDateTime.now());
+        TimedLocation timedLocation = new TimedLocation(location, animal, ZonedDateTime.now());
         timedLocation = timedLocationRepository.save(timedLocation);
         return timedLocation;
     }

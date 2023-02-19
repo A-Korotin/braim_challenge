@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.simbir_soft.braim_challenge.json.serializer.CustomEntitySerializer;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -33,5 +33,5 @@ public class TimedLocation extends BaseEntity {
 
     @JsonProperty(value = "dateTimeOfVisitLocationPoint")
     @Column(name = "visit_time")
-    private LocalDateTime visitTime;
+    private ZonedDateTime visitTime;
 }

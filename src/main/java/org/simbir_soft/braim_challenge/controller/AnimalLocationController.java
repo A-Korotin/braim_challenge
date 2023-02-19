@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,8 +28,8 @@ public class AnimalLocationController {
 
     @GetMapping
     public ResponseEntity<?> searchLocations(@PathVariable @Min(value = 1) Long animalId,
-                                             @RequestParam(required = false) LocalDateTime startDateTime,
-                                             @RequestParam(required = false) LocalDateTime endDateTime,
+                                             @RequestParam(required = false) ZonedDateTime startDateTime,
+                                             @RequestParam(required = false) ZonedDateTime endDateTime,
                                              @RequestParam(defaultValue = "0") @Min(value = 0) Long from,
                                              @RequestParam(defaultValue = "10") @Min(value = 1) Long size) {
         Animal animal = animalService.findById(animalId).orElseThrow(DataMissingException::new);

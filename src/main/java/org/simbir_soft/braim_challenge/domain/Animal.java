@@ -9,7 +9,7 @@ import org.simbir_soft.braim_challenge.json.serializer.CustomEntitySerializer;
 import org.simbir_soft.braim_challenge.json.serializer.TimedLocationListSerializer;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class Animal extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LifeStatus lifeStatus = LifeStatus.ALIVE;
 
-    private LocalDateTime chippingDateTime;
+    private ZonedDateTime chippingDateTime;
 
 
     @JsonProperty(value = "chipperId")
@@ -75,5 +75,5 @@ public class Animal extends BaseEntity {
     @Builder.Default
     private List<TimedLocation> visitedLocations = new ArrayList<>();
 
-    private LocalDateTime deathDateTime = null;
+    private ZonedDateTime deathDateTime = null;
 }
