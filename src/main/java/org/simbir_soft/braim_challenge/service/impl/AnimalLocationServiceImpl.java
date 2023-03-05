@@ -63,7 +63,7 @@ public class AnimalLocationServiceImpl implements AnimalLocationService {
         }
 
         int oldIndex = animal.getVisitedLocations().stream()
-                .map(TimedLocation::getLocation).collect(Collectors.toList()).indexOf(oldLocation);
+                .map(TimedLocation::getLocation).toList().indexOf(oldLocation);
 
         Location before = null;
         Location after = null;

@@ -76,7 +76,7 @@ public class AnimalController {
     @PostMapping("/{animalId}/types/{typeId}")
     public ResponseEntity<?> addAnimalType(@PathVariable @Min(value = 1) Long animalId,
                                            @PathVariable @Min(value = 1) Long typeId) {
-        return ResponseEntity.ok(animalService.addTypeById(animalId, typeId));
+        return ResponseEntity.status(201).body(animalService.addTypeById(animalId, typeId));
     }
 
     @PutMapping("/{animalId}/types")

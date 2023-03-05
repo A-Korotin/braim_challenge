@@ -195,6 +195,9 @@ public class AnimalServiceImpl implements AnimalService {
                 !animalHasType(animal, typeId)) {
             throw new DataMissingException();
         }
+        if (animal.getAnimalTypes().size() == 1) {
+            throw new DataMissingException();
+        }
         animal.getAnimalTypes().removeIf(t -> t.getId().equals(typeId));
         return animalRepository.save(animal);
     }

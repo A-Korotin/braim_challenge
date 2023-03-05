@@ -10,6 +10,7 @@ import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.service.AnimalLocationService;
 import org.simbir_soft.braim_challenge.service.AnimalService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/animals/{animalId}/locations")
 @RequiredArgsConstructor
+@Validated
 public class AnimalLocationController {
 
     private final AnimalLocationService service;
