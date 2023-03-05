@@ -76,4 +76,31 @@ public class Animal extends BaseEntity {
     private List<TimedLocation> visitedLocations = new ArrayList<>();
 
     private ZonedDateTime deathDateTime = null;
+
+    public boolean leftChippingLocation() {
+        int size = visitedLocations.size();
+        return size > 0 &&
+                !visitedLocations.get(size - 1).getLocation()
+                        .equals(chippingLocation); // last location is not a chipping location
+
+    }
+
+    public boolean hasType(Long typeId) {
+        return animalTypes.stream().anyMatch(t -> t.getId().equals(typeId));
+    }
+
+    public boolean removeType(Long typeId) {
+        if (animalTypes.size() == 1 && animalTypes.get(0).getId().equals(typeId)) {
+            return false;
+        }
+
+        return animalTypes.removeIf(t -> t.getId().equals(typeId));
+    }
+
+    public boolean isDead() {
+        return lifeStatus.equals(LifeStatus.DEAD);
+    }
+    public boolean isAlive() {
+        return lifeStatus.equals(LifeStatus.ALIVE);
+    }
 }

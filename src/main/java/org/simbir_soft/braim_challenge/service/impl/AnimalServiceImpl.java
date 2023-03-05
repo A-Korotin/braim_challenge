@@ -62,8 +62,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     private void checkUpdate(Animal oldAnimal, Animal newAnimal) {
-        if (oldAnimal.getLifeStatus().equals(Animal.LifeStatus.DEAD) &&
-                newAnimal.getLifeStatus().equals(Animal.LifeStatus.ALIVE)) {
+        if (oldAnimal.isDead() && newAnimal.isAlive()) {
             throw new DataInvalidException();
         }
         if (oldAnimal.getVisitedLocations().size() > 0 &&
@@ -75,7 +74,7 @@ public class AnimalServiceImpl implements AnimalService {
     private void preformUpdate(Animal oldAnimal, Animal newAnimal) {
         newAnimal.setId(oldAnimal.getId());
         newAnimal.setVisitedLocations(oldAnimal.getVisitedLocations());
-        if (newAnimal.getLifeStatus().equals(Animal.LifeStatus.DEAD)) {
+        if (newAnimal.isDead()) {
             newAnimal.setDeathDateTime(ZonedDateTime.now());
         }
         newAnimal.setChippingDateTime(oldAnimal.getChippingDateTime());
@@ -102,19 +101,13 @@ public class AnimalServiceImpl implements AnimalService {
         return animalRepository.save(newAnimal);
     }
 
-    private boolean animalLeftChippingLocation(Animal animal) {
-        int size = animal.getVisitedLocations().size();
-        return size > 0 &&
-                !animal.getVisitedLocations().get(size - 1).getLocation()
-                        .equals(animal.getChippingLocation()); // last location is not a chipping location
-    }
-
     @Override
     public void delete(Long id) {
         Animal animal = loadAnimal(id);
-        if (animalLeftChippingLocation(animal)) {
+        if (animal.leftChippingLocation()) {
             throw new DataInvalidException();
         }
+
         animalRepository.deleteById(id);
     }
 
@@ -147,16 +140,13 @@ public class AnimalServiceImpl implements AnimalService {
         return animalRepository.existsById(id);
     }
 
-    private boolean animalHasType(Animal animal, Long typeId) {
-        return animal.getAnimalTypes().stream().anyMatch(t -> t.getId().equals(typeId));
-    }
 
     @Override
     public Animal addTypeById(Long animalId, Long typeId) {
         Animal animal = loadAnimal(animalId);
         AnimalType animalType = loadType(typeId);
 
-        if (animalHasType(animal, typeId)) {
+        if (animal.hasType(typeId)) {
             throw new DataConflictException();
         }
 
@@ -175,10 +165,10 @@ public class AnimalServiceImpl implements AnimalService {
     @Override
     public Animal editTypeById(Long animalId, Long oldTypeId, Long newTypeId) {
         Animal animal = loadAnimal(animalId);
-        if (!animalHasType(animal, oldTypeId)) {
+        if (!animal.hasType(oldTypeId)) {
             throw new DataMissingException();
         }
-        if (animalHasType(animal, newTypeId)) {
+        if (animal.hasType(newTypeId)) {
             throw new DataConflictException();
         }
 
@@ -192,13 +182,14 @@ public class AnimalServiceImpl implements AnimalService {
         Animal animal = loadAnimal(animalId);
 
         if (!animalTypeService.existsById(typeId) ||
-                !animalHasType(animal, typeId)) {
+                !animal.hasType(typeId)) {
             throw new DataMissingException();
         }
-        if (animal.getAnimalTypes().size() == 1) {
-            throw new DataMissingException();
+
+        if (!animal.removeType(typeId)) {
+            throw new DataInvalidException();
         }
-        animal.getAnimalTypes().removeIf(t -> t.getId().equals(typeId));
+
         return animalRepository.save(animal);
     }
 }
