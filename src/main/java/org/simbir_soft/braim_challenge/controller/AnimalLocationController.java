@@ -10,9 +10,11 @@ import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.service.AnimalLocationService;
 import org.simbir_soft.braim_challenge.service.AnimalService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/animals/{animalId}/locations")
 @RequiredArgsConstructor
+@Validated
 public class AnimalLocationController {
 
     private final AnimalLocationService service;
@@ -27,8 +30,8 @@ public class AnimalLocationController {
 
     @GetMapping
     public ResponseEntity<?> searchLocations(@PathVariable @Min(value = 1) Long animalId,
-                                             @RequestParam(required = false) LocalDateTime startDateTime,
-                                             @RequestParam(required = false) LocalDateTime endDateTime,
+                                             @RequestParam(required = false) ZonedDateTime startDateTime,
+                                             @RequestParam(required = false) ZonedDateTime endDateTime,
                                              @RequestParam(defaultValue = "0") @Min(value = 0) Long from,
                                              @RequestParam(defaultValue = "10") @Min(value = 1) Long size) {
         Animal animal = animalService.findById(animalId).orElseThrow(DataMissingException::new);

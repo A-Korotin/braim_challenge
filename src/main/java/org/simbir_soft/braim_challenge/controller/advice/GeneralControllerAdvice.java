@@ -18,41 +18,41 @@ public class GeneralControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handle(MethodArgumentNotValidException e) {
         e.printStackTrace();
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> handle(MethodArgumentTypeMismatchException e) {
         e.printStackTrace();
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(DataConflictException.class)
     public ResponseEntity<?> conflict(DataConflictException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<?> handle(ConstraintViolationException e) {
         e.printStackTrace();
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handle(HttpMessageNotReadableException e) {
         e.printStackTrace();
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(DataMissingException.class)
     public ResponseEntity<?> notFound(DataMissingException e) {
         e.printStackTrace();
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(404).body(e.getMessage());
     }
 
     @ExceptionHandler(AccessForbiddenException.class)
     public ResponseEntity<?> forbidden(AccessForbiddenException e) {
         e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
 }
