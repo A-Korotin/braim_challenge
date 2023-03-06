@@ -8,12 +8,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.simbir_soft.braim_challenge.json.serializer.CustomEntityListSerializer;
 import org.simbir_soft.braim_challenge.json.serializer.CustomEntitySerializer;
-import org.simbir_soft.braim_challenge.json.serializer.TimedLocationListSerializer;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -55,7 +55,7 @@ public class Animal extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LifeStatus lifeStatus = LifeStatus.ALIVE;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private ZonedDateTime chippingDateTime;
 
 
@@ -72,13 +72,14 @@ public class Animal extends BaseEntity {
     @JoinColumn(name = "chipping_location_id")
     private Location chippingLocation;
 
-    @JsonSerialize(using = TimedLocationListSerializer.class)
+    //@JsonSerialize(using = TimedLocationListSerializer.class)
+    @JsonSerialize(using = CustomEntityListSerializer.class)
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
     @JoinColumn(name = "animal_id")
     @Builder.Default
     private List<TimedLocation> visitedLocations = new ArrayList<>();
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private ZonedDateTime deathDateTime = null;
 
     public boolean leftChippingLocation() {
@@ -109,5 +110,34 @@ public class Animal extends BaseEntity {
     @JsonIgnore
     public boolean isAlive() {
         return lifeStatus.equals(LifeStatus.ALIVE);
+    }
+
+    @JsonIgnore
+    public Long getVisitedIdAtIndexOrNull(int index) {
+        try {
+            return visitedLocations.get(index).getLocation().getId();
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    @JsonIgnore
+    public int getVisitedIndex(Long locationId) {
+        return visitedLocations.stream().map(BaseEntity::getId).toList().indexOf(locationId);
+    }
+
+    @JsonIgnore
+    public Optional<TimedLocation> getVisitedWithId(Long locationId) {
+        return visitedLocations.stream().filter(tl -> tl.getId().equals(locationId)).findFirst();
+    }
+
+    public void removeFirstLocationWithId(Long locationId) {
+        visitedLocations.removeIf(tl -> tl.getId().equals(locationId));
+
+        try {
+            if (visitedLocations.get(0).getLocation().equals(chippingLocation)) {
+                visitedLocations.remove(0);
+            }
+        } catch (IndexOutOfBoundsException ignored) {}
     }
 }

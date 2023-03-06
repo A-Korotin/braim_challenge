@@ -56,44 +56,33 @@ public class AnimalLocationServiceImpl implements AnimalLocationService {
         return timedLocation;
     }
 
-    private void checkUpdate(Animal animal, Location oldLocation, Location newLocation) {
-        if (animal.getVisitedLocations().get(0).getLocation().equals(oldLocation) &&
-            animal.getChippingLocation().equals(newLocation)) {
+    private void checkUpdate(Animal animal, Long oldId, Long newId) {
+        int oldIndex = animal.getVisitedIndex(oldId);
+
+        if (oldIndex == 0 && animal.getChippingLocation().getId().equals(newId)) {
             throw new DataInvalidException();
         }
 
-        int oldIndex = animal.getVisitedLocations().stream()
-                .map(TimedLocation::getLocation).toList().indexOf(oldLocation);
+        Long idBefore = animal.getVisitedIdAtIndexOrNull(oldIndex - 1);
+        Long idAfter = animal.getVisitedIdAtIndexOrNull(oldIndex + 1);
 
-        Location before = null;
-        Location after = null;
-        try {
-            before = animal.getVisitedLocations().get(oldIndex - 1).getLocation();
-        } catch (IndexOutOfBoundsException ignored) {}
-        try {
-            after = animal.getVisitedLocations().get(oldIndex + 1).getLocation();
-        } catch (IndexOutOfBoundsException ignored) {}
-
-        if (newLocation.equals(before) || newLocation.equals(after)) {
+        if (newId.equals(idBefore) || newId.equals(idAfter)) {
             throw new DataInvalidException();
         }
     }
 
     @Override
     public TimedLocation editLocationById(Long animalId, Long oldId, Long newId) {
-        if (oldId.equals(newId)) {
-            throw new DataInvalidException();
-        }
-
         Animal animal = animalService.findByIdOrThrowException(animalId);
         Location newLocation = loadLocation(newId);
 
-        TimedLocation timedLocation = animal.getVisitedLocations().stream()
-                .filter(l -> l.getLocation().getId().equals(oldId))
-                .findAny()
-                .orElseThrow(DataMissingException::new);
+        TimedLocation timedLocation = animal.getVisitedWithId(oldId)
+                .orElseThrow(() -> new DataMissingException("Location with id %d not found".formatted(oldId)));
 
-        checkUpdate(animal, timedLocation.getLocation(), newLocation);
+        if (timedLocation.getLocation().getId().equals(newId)) {
+            throw new DataInvalidException("Locations are identical");
+        }
+        checkUpdate(animal, oldId, newId);
         timedLocation.setLocation(newLocation);
         return timedLocationRepository.save(timedLocation);
     }
@@ -101,14 +90,11 @@ public class AnimalLocationServiceImpl implements AnimalLocationService {
     @Override
     public void deleteLocationById(Long animalId, Long locationId) {
         Animal animal = animalService.findByIdOrThrowException(animalId);
-        TimedLocation location = animal.getVisitedLocations().stream()
-                .filter(l -> l.getLocation().getId().equals(locationId))
-                .findAny()
-                .orElseThrow(DataMissingException::new);
-        animal.setVisitedLocations(animal.getVisitedLocations()
-                .stream()
-                .filter(l -> !l.getLocation().getId().equals(locationId))
-                .collect(Collectors.toList()));
+        TimedLocation location = animal.getVisitedWithId(locationId)
+                .orElseThrow(() -> new DataMissingException("Location with id %d not found".formatted(locationId)));
+
+        animal.removeFirstLocationWithId(locationId);
+
         timedLocationRepository.deleteById(location.getId());
         animalRepository.save(animal);
     }
