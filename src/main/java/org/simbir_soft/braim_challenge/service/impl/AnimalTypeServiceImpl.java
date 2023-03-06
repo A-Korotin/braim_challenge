@@ -52,7 +52,11 @@ public class AnimalTypeServiceImpl implements AnimalTypeService {
             throw new DataInvalidException();
         }
 
-        animalTypeRepository.deleteById(id);
+        try {
+            animalTypeRepository.deleteById(id);
+        } catch (RuntimeException e) {
+            throw new DataInvalidException();
+        }
     }
 
     @Override

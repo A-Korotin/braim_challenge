@@ -1,5 +1,7 @@
 package org.simbir_soft.braim_challenge.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
@@ -53,6 +55,7 @@ public class Animal extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private LifeStatus lifeStatus = LifeStatus.ALIVE;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private ZonedDateTime chippingDateTime;
 
 
@@ -75,6 +78,7 @@ public class Animal extends BaseEntity {
     @Builder.Default
     private List<TimedLocation> visitedLocations = new ArrayList<>();
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private ZonedDateTime deathDateTime = null;
 
     public boolean leftChippingLocation() {
@@ -97,9 +101,12 @@ public class Animal extends BaseEntity {
         return animalTypes.removeIf(t -> t.getId().equals(typeId));
     }
 
+    @JsonIgnore
     public boolean isDead() {
         return lifeStatus.equals(LifeStatus.DEAD);
     }
+
+    @JsonIgnore
     public boolean isAlive() {
         return lifeStatus.equals(LifeStatus.ALIVE);
     }

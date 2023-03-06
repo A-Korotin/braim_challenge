@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.AccessForbiddenException;
+import org.simbir_soft.braim_challenge.exception.DataInvalidException;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
 import org.simbir_soft.braim_challenge.repository.AccountRepository;
@@ -89,8 +90,11 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
             throw new AccessForbiddenException();
         }
         checkIfCurrentUserIsAllowedToModify(id);
-
-        repository.deleteById(id);
+        try {
+            repository.deleteById(id);
+        } catch (RuntimeException e) {
+            throw new DataInvalidException();
+        }
     }
 
     @Override
