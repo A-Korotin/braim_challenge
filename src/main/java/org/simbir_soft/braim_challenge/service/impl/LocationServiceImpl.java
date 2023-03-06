@@ -35,13 +35,6 @@ public class LocationServiceImpl implements LocationService {
         }
     }
 
-    private void checkAnimalBoundWithAnimal(Long id) {
-        if(StreamSupport.stream(animalRepository.findAll().spliterator(), false)
-                .anyMatch(a -> a.getChippingLocation().getId().equals(id) ||
-                        a.getVisitedLocations().stream().anyMatch(l -> l.getLocation().getId().equals(id)))) {
-            throw new DataInvalidException("Failed to delete location with id %d. Bound with animal".formatted(id));
-        }
-    }
 
     @Override
     public Location save(Dto<Location> dto) {
@@ -63,8 +56,11 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public void delete(Long id) {
         checkId(id);
-        checkAnimalBoundWithAnimal(id);
-        locationRepository.deleteById(id);
+        try {
+            locationRepository.deleteById(id);
+        } catch (RuntimeException e) {
+            throw new DataInvalidException();
+        }
     }
 
     @Override

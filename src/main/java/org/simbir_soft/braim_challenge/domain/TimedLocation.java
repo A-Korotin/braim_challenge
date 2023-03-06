@@ -1,5 +1,6 @@
 package org.simbir_soft.braim_challenge.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -33,5 +34,6 @@ public class TimedLocation extends BaseEntity {
 
     @JsonProperty(value = "dateTimeOfVisitLocationPoint")
     @Column(name = "visit_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private ZonedDateTime visitTime;
 }
