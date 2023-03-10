@@ -2,6 +2,7 @@ package org.simbir_soft.braim_challenge.controller.advice;
 
 import jakarta.validation.ConstraintViolationException;
 import org.simbir_soft.braim_challenge.exception.AccessForbiddenException;
+import org.simbir_soft.braim_challenge.exception.DataInvalidException;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
 import org.springframework.http.HttpStatus;
@@ -17,13 +18,11 @@ public class GeneralControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handle(MethodArgumentNotValidException e) {
-        e.printStackTrace();
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<?> handle(MethodArgumentTypeMismatchException e) {
-        e.printStackTrace();
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
@@ -34,25 +33,26 @@ public class GeneralControllerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<?> handle(ConstraintViolationException e) {
-        e.printStackTrace();
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> handle(HttpMessageNotReadableException e) {
-        e.printStackTrace();
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(DataMissingException.class)
     public ResponseEntity<?> notFound(DataMissingException e) {
-        e.printStackTrace();
         return ResponseEntity.status(404).body(e.getMessage());
+    }
+
+    @ExceptionHandler(DataInvalidException.class)
+    public ResponseEntity<?> handle(DataInvalidException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(AccessForbiddenException.class)
     public ResponseEntity<?> forbidden(AccessForbiddenException e) {
-        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
     }
 }

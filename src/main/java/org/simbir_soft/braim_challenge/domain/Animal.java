@@ -53,6 +53,7 @@ public class Animal extends BaseEntity {
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private LifeStatus lifeStatus = LifeStatus.ALIVE;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
@@ -80,6 +81,7 @@ public class Animal extends BaseEntity {
     private List<TimedLocation> visitedLocations = new ArrayList<>();
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @Builder.Default
     private ZonedDateTime deathDateTime = null;
 
     public boolean leftChippingLocation() {
