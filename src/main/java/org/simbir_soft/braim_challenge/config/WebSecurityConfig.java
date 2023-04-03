@@ -1,6 +1,7 @@
 package org.simbir_soft.braim_challenge.config;
 
 import org.simbir_soft.braim_challenge.config.handler.CustomAccessDeniedHandler;
+import org.simbir_soft.braim_challenge.domain.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -47,6 +48,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers("/registration").anonymous()
+                .requestMatchers("/accounts/search").hasRole(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.GET, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

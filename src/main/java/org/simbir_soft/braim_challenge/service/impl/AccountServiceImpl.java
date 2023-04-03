@@ -1,15 +1,14 @@
 package org.simbir_soft.braim_challenge.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.simbir_soft.braim_challenge.aspect.annotation.CheckAuth;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
-import org.simbir_soft.braim_challenge.exception.AccessForbiddenException;
+import org.simbir_soft.braim_challenge.exception.DataConflictException;
 import org.simbir_soft.braim_challenge.exception.DataInvalidException;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
-import org.simbir_soft.braim_challenge.exception.DataConflictException;
 import org.simbir_soft.braim_challenge.repository.AccountRepository;
 import org.simbir_soft.braim_challenge.service.AccountService;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -49,18 +48,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         }
     }
 
-    private void checkIfCurrentUserIsAllowedToModify(Long id) {
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<Account> accountOptional = repository.findByEmail(name);
-        if (accountOptional.isEmpty()) {
-            throw new AccessForbiddenException();
-        }
-
-        if (!accountOptional.get().getId().equals(id)) {
-            throw new AccessForbiddenException();
-        }
-    }
-
     @Override
     public Account save(Dto<Account> dto) {
         Account dtoAccount = dto.fromDto();
@@ -72,8 +59,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
 
     @Override
+    @CheckAuth
     public Account update(Long id, Dto<Account> dto) {
-        checkIfCurrentUserIsAllowedToModify(id);
         checkId(id);
 
         Account dtoAccount = dto.fromDto();
@@ -85,11 +72,12 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
 
     @Override
+    @CheckAuth
     public void delete(Long id) {
         if (!repository.existsById(id)) {
-            throw new AccessForbiddenException();
+            throw new DataMissingException();
         }
-        checkIfCurrentUserIsAllowedToModify(id);
+
         try {
             repository.deleteById(id);
         } catch (RuntimeException e) {
@@ -98,6 +86,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
+    @CheckAuth
     public Optional<Account> findById(Long id) {
         return repository.findById(id);
     }
@@ -130,6 +119,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public Account register(Account account) {
+        account.setPassword(encoder.encode(account.getPassword()));
         return repository.save(account);
     }
 
