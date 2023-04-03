@@ -23,8 +23,7 @@ public class Account extends BaseEntity {
     private String email;
 
     @Enumerated(value = EnumType.STRING)
-    @Builder.Default
-    private UserRole role = UserRole.USER;
+    private UserRole role;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
