@@ -18,11 +18,7 @@ services:
 
   # Сервис для разворачивания контейнера с приложением
   webapi:
-    #image: janill/braim:refactoring
-    pull_policy: build
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: braim_challenge-webapi
     ports:
       - "8080:8080"
     depends_on:
