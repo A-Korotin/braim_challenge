@@ -22,6 +22,10 @@ public class Account extends BaseEntity {
     private String lastName;
     private String email;
 
+    @Enumerated(value = EnumType.STRING)
+    @Builder.Default
+    private UserRole role = UserRole.USER;
+
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @JsonIgnore

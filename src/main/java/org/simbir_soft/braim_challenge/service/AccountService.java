@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface AccountService extends CrudService<Account, Long> {
     Optional<Account> findByEmail(String email);
+
+    Account register(Account account);
 }

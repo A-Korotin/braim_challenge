@@ -127,13 +127,19 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         return repository.existsById(id);
     }
 
+
+    @Override
+    public Account register(Account account) {
+        return repository.save(account);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Account account = repository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
         return User.builder()
                 .username(account.getEmail())
                 .password(account.getPassword())
-                .roles("User")
+                .roles(account.getRole().name())
                 .build();
     }
 }
