@@ -1,5 +1,6 @@
 package org.simbir_soft.braim_challenge.config;
 
+import org.apache.catalina.User;
 import org.simbir_soft.braim_challenge.config.handler.CustomAccessDeniedHandler;
 import org.simbir_soft.braim_challenge.domain.UserRole;
 import org.springframework.context.annotation.Bean;
@@ -48,7 +49,14 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers("/registration").anonymous()
-                .requestMatchers("/accounts/search").hasRole(UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.DELETE, "/accounts/*").authenticated()
+                .requestMatchers(HttpMethod.GET, "/accounts/search").hasRole(UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.GET, "/areas").authenticated()
+                .requestMatchers("/areas/*").hasRole(UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.DELETE,"/animals/*/types/*").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
+                .requestMatchers(HttpMethod.POST, "/**").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
+                .requestMatchers(HttpMethod.PUT, "/**").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
+                .requestMatchers(HttpMethod.DELETE, "/**").hasRole(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.GET, "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
