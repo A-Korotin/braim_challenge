@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.BaseEntity;
 import org.simbir_soft.braim_challenge.domain.dto.AccountDto;
+import org.simbir_soft.braim_challenge.domain.dto.RegisterAccountDto;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.service.AccountService;
 import org.springframework.http.HttpStatusCode;
@@ -27,7 +28,7 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping("/registration")
-    public ResponseEntity<?> registerAccount(@Valid @RequestBody AccountDto accountDto) {
+    public ResponseEntity<?> registerAccount(@Valid @RequestBody RegisterAccountDto accountDto) {
         Account account = accountService.save(accountDto);
 
         return ResponseEntity.status(201).body(account);
@@ -71,4 +72,10 @@ public class AccountController {
         accountService.delete(accountId);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/accounts")
+    public ResponseEntity<?> createAccount(@Valid @RequestBody AccountDto accountDto) {
+        return ResponseEntity.status(201).body(accountService.save(accountDto));
+    }
+
 }

@@ -11,7 +11,7 @@ import org.simbir_soft.braim_challenge.domain.Location;
 import java.math.BigDecimal;
 
 @Data
-public class LocationDto extends Dto<Location> {
+public class LocationDto implements Dto<Location> {
     @Override
     public Location fromDto() {
         return Location.builder()

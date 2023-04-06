@@ -17,12 +17,6 @@ public class CustomEntitySerializer extends StdSerializer<BaseEntity> {
         super(clazz);
     }
 
-//    @Override
-//    public void serialize(Account value,
-//                          JsonGenerator gen,
-//                          SerializerProvider provider) throws IOException {
-//        gen.writeNumber(value.getId());
-//    }
 
     @Override
     public void serialize(BaseEntity value, JsonGenerator gen, SerializerProvider provider) throws IOException {

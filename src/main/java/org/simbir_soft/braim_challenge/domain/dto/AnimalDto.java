@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class AnimalDto extends Dto<Animal> {
+public class AnimalDto implements Dto<Animal> {
 
     @NotEmpty
     private List<@NotNull @Min(value = 1) Long> animalTypes;

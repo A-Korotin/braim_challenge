@@ -11,7 +11,7 @@ import org.simbir_soft.braim_challenge.domain.Location;
 import java.math.BigDecimal;
 
 @Data
-public class EditAnimalDto extends Dto<Animal> {
+public class EditAnimalDto implements Dto<Animal> {
 
     @NotNull
     @DecimalMin(value = "0.0000000001")
