@@ -49,15 +49,25 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers("/registration").anonymous()
+                // accounts
                 .requestMatchers(HttpMethod.DELETE, "/accounts/*").authenticated()
+                .requestMatchers(HttpMethod.POST, "/accounts").hasRole(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.GET, "/accounts/search").hasRole(UserRole.ADMIN.name())
+                .requestMatchers(HttpMethod.PUT, "/accounts/*").authenticated()
+                // areas
                 .requestMatchers(HttpMethod.GET, "/areas").authenticated()
                 .requestMatchers("/areas/*").hasRole(UserRole.ADMIN.name())
+                // animal types
+                .requestMatchers("/animals/types/*").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
+                .requestMatchers(HttpMethod.GET, "/animals/types").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/animals/types/*").hasRole(UserRole.ADMIN.name())
+                // animals
                 .requestMatchers(HttpMethod.DELETE,"/animals/*/types/*").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
+                // general
                 .requestMatchers(HttpMethod.POST, "/**").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
                 .requestMatchers(HttpMethod.PUT, "/**").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
                 .requestMatchers(HttpMethod.DELETE, "/**").hasRole(UserRole.ADMIN.name())
-                .requestMatchers(HttpMethod.GET, "/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

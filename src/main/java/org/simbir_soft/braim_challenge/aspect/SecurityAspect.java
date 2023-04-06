@@ -29,7 +29,11 @@ public class SecurityAspect {
     private boolean userIsInvalid(Long targetId) {
         Account account = getCurrentAccount().orElseThrow(AccessForbiddenException::new);
 
-        return account.getRole() != UserRole.ADMIN || !account.getId().equals(targetId);
+        if (account.getRole() == UserRole.ADMIN) {
+            return false;
+        }
+
+        return !account.getId().equals(targetId);
     }
 
     @Around("@annotation(org.simbir_soft.braim_challenge.aspect.annotation.CheckAuth)")
