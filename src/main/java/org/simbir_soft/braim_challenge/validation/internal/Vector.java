@@ -10,11 +10,11 @@ public class Vector {
 
     public Vector (Point p1, Point p2) {
         x = p2.getX() - p1.getX();
-        y = p2.getY() - p1.getX();
+        y = p2.getY() - p1.getY();
     }
 
     // pseudo dot product - псевдоскалярное произведение векторов
-    public double pdt(Vector other) {
+    public double pdp(Vector other) {
         return x * other.y - other.x * y;
     }
 }
