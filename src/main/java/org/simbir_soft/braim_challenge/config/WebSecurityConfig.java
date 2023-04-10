@@ -58,11 +58,12 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/areas").authenticated()
                 .requestMatchers("/areas/*").hasRole(UserRole.ADMIN.name())
                 // animal types
-                .requestMatchers("/animals/types/*").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
-                .requestMatchers(HttpMethod.GET, "/animals/types").authenticated()
+                .requestMatchers(HttpMethod.GET, "/animals/types/*").authenticated()
                 .requestMatchers(HttpMethod.DELETE, "/animals/types/*").hasRole(UserRole.ADMIN.name())
+                .requestMatchers("/animals/types/*").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
                 // animals
                 .requestMatchers(HttpMethod.DELETE,"/animals/*/types/*").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
+                .requestMatchers(HttpMethod.POST, "/animals").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
                 // general
                 .requestMatchers(HttpMethod.POST, "/**").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
                 .requestMatchers(HttpMethod.PUT, "/**").hasAnyRole(UserRole.ADMIN.name(), UserRole.CHIPPER.name())
