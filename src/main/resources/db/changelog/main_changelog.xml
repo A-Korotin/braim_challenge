@@ -14,4 +14,5 @@
     <include file="migrations/migration_09-02-2023-Location_Time.xml" relativeToChangelogFile="true"/>
     <include file="migrations/migration_13-02-2023-Rename_type_column.xml" relativeToChangelogFile="true"/>
     <include file="migrations/migration_03-04-2023-User_Roles.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/migration_10-04-2023-Areas.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

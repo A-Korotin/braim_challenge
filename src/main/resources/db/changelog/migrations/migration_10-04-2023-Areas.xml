@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+    <changeSet id="" author="Alexey Korotin">
+        <sql dbms="postgresql"
+             endDelimiter=";"
+             splitStatements="true"
+             stripComments="true">
+
+            CREATE TABLE IF NOT EXISTS area (
+                id BIGSERIAL,
+                name TEXT
+            );
+
+            ALTER TABLE area
+                ADD CONSTRAINT PK_AREA PRIMARY KEY (id);
+
+
+            CREATE TABLE IF NOT EXISTS area_location_relation (
+                id BIGSERIAL,
+                area_id BIGINT,
+                location_id BIGINT,
+                location_order BIGINT
+            );
+
+            ALTER TABLE area_location_relation
+                ADD CONSTRAINT PK_AREA_LOCATION_RELATION PRIMARY KEY (id);
+
+            ALTER TABLE area_location_relation
+                ADD CONSTRAINT FK_AREA_LOCATION_RELATION_ON_AREA FOREIGN KEY (area_id) REFERENCES area(id);
+
+            ALTER TABLE area_location_relation
+                ADD CONSTRAINT FK_AREA_LOCATION_RELATION_ON_LOCATION FOREIGN KEY (location_id) REFERENCES location(id);
+        </sql>
+    </changeSet>
+</databaseChangeLog>
