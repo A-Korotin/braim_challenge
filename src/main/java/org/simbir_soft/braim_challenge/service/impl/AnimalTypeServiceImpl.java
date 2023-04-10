@@ -1,6 +1,7 @@
 package org.simbir_soft.braim_challenge.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.simbir_soft.braim_challenge.aspect.annotation.ExistingId;
 import org.simbir_soft.braim_challenge.domain.AnimalType;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
@@ -23,12 +24,6 @@ public class AnimalTypeServiceImpl implements AnimalTypeService {
         }
     }
 
-    private void checkId(Long id) {
-        if (!animalTypeRepository.existsById(id)) {
-            throw new DataMissingException();
-        }
-    }
-
     @Override
     public AnimalType save(Dto<AnimalType> dto) {
         AnimalType type = dto.fromDto();
@@ -37,8 +32,8 @@ public class AnimalTypeServiceImpl implements AnimalTypeService {
     }
 
     @Override
+    @ExistingId(validator = AnimalTypeService.class)
     public AnimalType update(Long id, Dto<AnimalType> dto) {
-        checkId(id);
         AnimalType type = dto.fromDto();
         checkUnique(type);
         type.setId(id);
@@ -46,8 +41,8 @@ public class AnimalTypeServiceImpl implements AnimalTypeService {
     }
 
     @Override
+    @ExistingId(validator = AnimalTypeService.class)
     public void delete(Long id) {
-        checkId(id);
         if (animalWithTypeExists(id)) {
             throw new DataInvalidException();
         }

@@ -1,6 +1,7 @@
 package org.simbir_soft.braim_challenge.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.simbir_soft.braim_challenge.aspect.annotation.ExistingId;
 import org.simbir_soft.braim_challenge.domain.Location;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
@@ -29,13 +30,6 @@ public class LocationServiceImpl implements LocationService {
         }
     }
 
-    private void checkId(Long id) {
-        if (!locationRepository.existsById(id)) {
-            throw new DataMissingException();
-        }
-    }
-
-
     @Override
     public Location save(Dto<Location> dto) {
         Location location = dto.fromDto();
@@ -45,8 +39,8 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    @ExistingId(validator = LocationService.class)
     public Location update(Long id, Dto<Location> dto) {
-        checkId(id);
         Location location = dto.fromDto();
         checkUnique(location);
         location.setId(id);
@@ -54,8 +48,8 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
+    @ExistingId(validator = LocationService.class)
     public void delete(Long id) {
-        checkId(id);
         try {
             locationRepository.deleteById(id);
         } catch (RuntimeException e) {
