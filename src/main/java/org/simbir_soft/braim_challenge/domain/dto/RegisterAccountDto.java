@@ -3,9 +3,11 @@ package org.simbir_soft.braim_challenge.domain.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.UserRole;
 
+@Data
 public class RegisterAccountDto implements Dto<Account> {
     @NotNull
     @NotBlank
