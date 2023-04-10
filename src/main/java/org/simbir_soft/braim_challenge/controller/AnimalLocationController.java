@@ -13,8 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,8 +36,10 @@ public class AnimalLocationController {
                                              @RequestParam(defaultValue = "10") @Min(value = 1) Long size) {
         Animal animal = animalService.findById(animalId).orElseThrow(DataMissingException::new);
         List<TimedLocation> filtered = animal.getVisitedLocations().stream()
-                .filter(l -> startDateTime == null || l.getVisitTime().isAfter(startDateTime))
-                .filter(l -> endDateTime == null || l.getVisitTime().isBefore(endDateTime))
+                .filter(l -> startDateTime == null || l.getVisitTime().isAfter(startDateTime) ||
+                        l.getVisitTime().truncatedTo(ChronoUnit.SECONDS).isEqual(startDateTime))
+                .filter(l -> endDateTime == null || l.getVisitTime().isBefore(endDateTime) ||
+                        l.getVisitTime().truncatedTo(ChronoUnit.SECONDS).isEqual(endDateTime))
                 .sorted(Comparator.comparing(TimedLocation::getVisitTime))
                 .skip(from)
                 .limit(size)
