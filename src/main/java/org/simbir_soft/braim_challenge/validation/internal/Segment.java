@@ -19,14 +19,14 @@ public class Segment {
         double pdp2 = mainVec.pdp(aux2);
 
         if (Math.abs(pdp1) <= THRESHOLD || Math.abs(pdp2) <= THRESHOLD) {
-            return true;
+            return false;
         }
 
         pdp1 /= Math.abs(pdp1);
         pdp2 /= Math.abs(pdp2);
 
         // псевдоскалярное произведение разных знаков
-        return pdp1 + pdp2 <= THRESHOLD;
+        return Math.abs(pdp1 + pdp2) <= THRESHOLD;
     }
 
     private boolean rangeIntersection(double sFirst, double eFirst, double sSecond, double eSecond) {

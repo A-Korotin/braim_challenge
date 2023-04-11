@@ -55,7 +55,7 @@ public class WebSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/accounts/search").hasRole(UserRole.ADMIN.name())
                 .requestMatchers(HttpMethod.PUT, "/accounts/*").authenticated()
                 // areas
-                .requestMatchers(HttpMethod.GET, "/areas").authenticated()
+                .requestMatchers(HttpMethod.GET, "/areas/*").authenticated()
                 .requestMatchers("/areas/*").hasRole(UserRole.ADMIN.name())
                 // animal types
                 .requestMatchers(HttpMethod.GET, "/animals/types/*").authenticated()

@@ -31,8 +31,8 @@ public class CustomAreaPointsSerializer extends StdSerializer<List<OrderedLocati
     @Override
     public void serialize(List<OrderedLocation> value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         List<Location> out = value.stream().map(v ->
-                new Location(v.getLocation().getLongitude(),
-                             v.getLocation().getLatitude()))
+                new Location(v.getLongitude(),
+                             v.getLatitude()))
                 .toList();
         gen.writePOJO(out);
     }

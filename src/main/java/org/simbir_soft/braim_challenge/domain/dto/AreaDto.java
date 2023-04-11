@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.simbir_soft.braim_challenge.domain.Area;
+import org.simbir_soft.braim_challenge.domain.Location;
 import org.simbir_soft.braim_challenge.domain.OrderedLocation;
 import org.simbir_soft.braim_challenge.validation.annotation.NonIntersectingPolygon;
 
@@ -27,8 +28,14 @@ public class AreaDto implements Dto<Area> {
     public Area fromDto() {
         AtomicLong order = new AtomicLong();
 
-        return Area.builder().name(name)
-                .areaPoints(areaPoints.stream().map(dto -> new OrderedLocation(order.getAndIncrement(), dto.fromDto())).toList())
+        return Area.builder()
+                .name(name)
+                .areaPoints(areaPoints.stream().map(dto -> {
+                    Location location = dto.fromDto();
+                    return new OrderedLocation(order.getAndIncrement(),
+                                    location.getLongitude(), location.getLatitude(), null);
+                        })
+                    .toList())
                 .build();
     }
 }

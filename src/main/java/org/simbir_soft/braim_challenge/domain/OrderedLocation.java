@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @Builder
@@ -17,7 +19,13 @@ public class OrderedLocation extends BaseEntity {
     @Column(name = "location_order")
     private long order;
 
+    private BigDecimal longitude;
+
+    private BigDecimal latitude;
+
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
+    @ToString.Exclude
+    @JoinColumn(name = "area_id")
+    private Area area;
 }

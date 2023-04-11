@@ -26,4 +26,16 @@ public class AreaController {
     public ResponseEntity<?> getArea(@PathVariable @Min(1) Long areaId) {
         return ResponseEntity.ok(areaService.findById(areaId).orElseThrow(DataMissingException::new));
     }
+
+    @PutMapping("/areas/{areaId}")
+    public ResponseEntity<?> editArea(@PathVariable @Min(1) Long areaId,
+                                      @RequestBody AreaDto dto) {
+        return ResponseEntity.ok(areaService.update(areaId, dto));
+    }
+
+    @DeleteMapping("/areas/{areaId}")
+    public ResponseEntity<?> deleteArea(@PathVariable @Min(1) Long areaId) {
+        areaService.delete(areaId);
+        return ResponseEntity.ok().build();
+    }
 }

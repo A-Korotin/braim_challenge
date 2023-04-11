@@ -14,17 +14,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class OrderedLocationServiceImpl implements OrderedLocationService {
-    private final LocationRepository locationRepository;
     private final OrderedLocationRepository orderedLocationRepository;
 
     @Override
     public OrderedLocation save(OrderedLocation entity) {
-        Location enitityLocation = entity.getLocation();
-        Location location = locationRepository.
-                findByLatitudeAndLongitude(enitityLocation.getLatitude(), enitityLocation.getLongitude())
-                .orElse(locationRepository.save(enitityLocation));
-
-        entity.setLocation(location);
 
         return orderedLocationRepository.save(entity);
     }

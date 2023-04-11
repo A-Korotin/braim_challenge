@@ -48,7 +48,14 @@ public class PolygonValidator implements ConstraintValidator<NonIntersectingPoly
 
         for (int i = 0; i < segments.size(); ++i) {
             Segment segment1 = segments.get(i);
-            for (int j = i + 2; j < segments.size() - 1; ++j) {
+            for (int j = 0; j < segments.size(); ++j) {
+                // пропускаем соседние и идентичные стороны
+                if (Math.abs(i - j) <= 1 ||
+                        (i == segments.size() - 1 && j == 0) ||
+                        (j == segments.size() - 1 && i == 0)) {
+                    continue;
+                }
+
                 Segment segment2 = segments.get(j);
 
                 // есть пересечение не соседних сторон многоугольника

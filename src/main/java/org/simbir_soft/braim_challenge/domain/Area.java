@@ -18,12 +18,8 @@ import java.util.List;
 public class Area extends BaseEntity {
     private String name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "area_location_relation",
-            joinColumns = @JoinColumn(name = "area_id"),
-            inverseJoinColumns = @JoinColumn(name = "location_id")
-    )
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "area_id")
     @JsonSerialize(using = CustomAreaPointsSerializer.class)
     private List<OrderedLocation> areaPoints;
 }
