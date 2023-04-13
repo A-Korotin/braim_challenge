@@ -8,8 +8,6 @@ services:
     image: postgres:latest
     ports:
       - "5432:5432"
-    volumes:
-      - /var/lib/postgresql/data/
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
       - POSTGRES_USER=postgres

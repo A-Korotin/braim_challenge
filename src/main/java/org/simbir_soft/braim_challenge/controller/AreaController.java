@@ -5,10 +5,13 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.dto.AreaDto;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
+import org.simbir_soft.braim_challenge.service.AnalyticsService;
 import org.simbir_soft.braim_challenge.service.AreaService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class AreaController {
 
     private final AreaService areaService;
+    private final AnalyticsService analyticsService;
 
     @PostMapping("/areas")
     public ResponseEntity<?> createArea(@Valid @RequestBody AreaDto dto) {
@@ -37,5 +41,13 @@ public class AreaController {
     public ResponseEntity<?> deleteArea(@PathVariable @Min(1) Long areaId) {
         areaService.delete(areaId);
         return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/areas/{areaId}/analytics")
+    public ResponseEntity<?> analytics(@PathVariable @Min(1) Long areaId,
+                                       @RequestParam LocalDate startDate,
+                                       @RequestParam LocalDate endDate) {
+        return ResponseEntity.ok(analyticsService.getAnalytics(areaId, startDate, endDate));
     }
 }

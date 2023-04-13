@@ -13,6 +13,7 @@ import org.simbir_soft.braim_challenge.service.AnimalService;
 import org.simbir_soft.braim_challenge.service.LocationService;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
@@ -22,7 +23,6 @@ public class LocationServiceImpl implements LocationService {
 
     private final LocationRepository locationRepository;
 
-    private final AnimalRepository animalRepository;
 
     private void checkUnique(Location location) {
         if(locationRepository.existsByLatitudeAndLongitude(location.getLatitude(), location.getLongitude())) {
@@ -79,5 +79,11 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public boolean existsById(Long id) {
         return locationRepository.existsById(id);
+    }
+
+
+    @Override
+    public Optional<Location> findByLatitudeAndLongitude(BigDecimal latitude, BigDecimal longitude) {
+        return locationRepository.findByLatitudeAndLongitude(latitude, longitude);
     }
 }

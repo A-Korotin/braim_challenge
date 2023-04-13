@@ -24,16 +24,16 @@ public class OrderedLocationServiceImpl implements OrderedLocationService {
 
     @Override
     public Optional<OrderedLocation> findById(Long id) {
-        return Optional.empty();
+        return orderedLocationRepository.findById(id);
     }
 
     @Override
     public boolean existsById(Long id) {
-        return false;
+        return orderedLocationRepository.existsById(id);
     }
 
     @Override
     public void delete(Long id) {
-
+        orderedLocationRepository.deleteById(id);
     }
 }
