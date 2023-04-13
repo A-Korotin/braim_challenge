@@ -78,13 +78,9 @@ public class AnalyticsServiceImpl implements AnalyticsService {
             }
         }
 
-        List<AnimalTypeAnalytic> analytics = analyticMap.values().stream()
+        return analyticMap.values().stream()
                 .filter(a -> a.getGone() != 0 || a.getArrived() != 0 || a.getTotal() != 0)
                 .toList();
-
-        analytics.forEach(a -> a.setTotal(a.getTotal() + a.getArrived() - a.getGone()));
-
-        return analytics;
     }
 
     private Analytics countTotal(Area area, Iterable<Animal> animals, LocalDate start, LocalDate end) {
@@ -93,7 +89,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
         for (Animal animal: animals) {
             performCheck(analytics, area, animal, start, end);
         }
-        analytics.setTotal(analytics.getTotal() + analytics.getArrived() - analytics.getGone());
+
         return analytics;
     }
 
