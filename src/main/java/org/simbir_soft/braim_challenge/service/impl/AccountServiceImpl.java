@@ -2,6 +2,7 @@ package org.simbir_soft.braim_challenge.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.aspect.annotation.CheckAuth;
+import org.simbir_soft.braim_challenge.aspect.annotation.ExistingId;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
@@ -31,12 +32,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         }
     }
 
-    private void checkId(Long id) {
-        if (!repository.existsById(id)) {
-            throw new DataMissingException();
-        }
-    }
-
     private void checkEmailById(Long id, String email) {
         Optional<Account> optionalAccount = repository.findByEmail(email);
         if (optionalAccount.isEmpty()) {
@@ -60,9 +55,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     @CheckAuth
+    @ExistingId(validator = AccountService.class)
     public Account update(Long id, Dto<Account> dto) {
-        checkId(id);
-
         Account dtoAccount = dto.fromDto();
         checkEmailById(id, dtoAccount.getEmail());
         dtoAccount.setId(id);
@@ -73,11 +67,8 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     @CheckAuth
+    @ExistingId(validator = AccountService.class)
     public void delete(Long id) {
-        if (!repository.existsById(id)) {
-            throw new DataMissingException();
-        }
-
         try {
             repository.deleteById(id);
         } catch (RuntimeException e) {
@@ -88,6 +79,11 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     @Override
     @CheckAuth
     public Optional<Account> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public Optional<Account> findByIdInternal(Long id) {
         return repository.findById(id);
     }
 

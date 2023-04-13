@@ -45,7 +45,7 @@ public class AnimalServiceImpl implements AnimalService {
         animal.setAnimalTypes(validTypes);
 
         Long chipperId = animal.getChipper().getId();
-        animal.setChipper(accountService.findById(chipperId).orElseThrow(DataMissingException::new));
+        animal.setChipper(accountService.findByIdInternal(chipperId).orElseThrow(DataMissingException::new));
 
         Long chippingLocationId = animal.getChippingLocation().getId();
         animal.setChippingLocation(locationService.findById(chippingLocationId).orElseThrow(DataMissingException::new));

@@ -8,8 +8,6 @@ services:
     image: postgres:latest
     ports:
       - "5432:5432"
-    volumes:
-      - /var/lib/postgresql/data/
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
       - POSTGRES_USER=postgres
@@ -18,7 +16,9 @@ services:
 
   # Сервис для разворачивания контейнера с приложением
   webapi:
-    image: braim_challenge-webapi
+    pull_policy: build
+    build:
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
@@ -32,7 +32,7 @@ services:
 
   # Сервис для разворачивания контейнера с автотестами
   tests:
-    image: mrexpen/planet_olymp_phase1
+    image: mrexpen/planet_olymp_phase2
     pull_policy: always
     ports:
       - "8090:8080"
