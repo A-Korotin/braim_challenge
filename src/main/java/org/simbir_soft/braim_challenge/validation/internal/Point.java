@@ -14,7 +14,7 @@ public class Point {
         Segment s = new Segment(this, outerPoint);
 
         for (Segment segment : polygon.getSegments()) {
-            if (segment.hasIntersection(s)) {
+            if (segment.hasIntersection(s,true)) {
                 intersectionCount++;
             }
         }

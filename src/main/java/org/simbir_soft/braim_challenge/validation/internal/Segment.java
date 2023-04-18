@@ -11,7 +11,7 @@ public class Segment {
     // точки, ограничивающие отрезок
     private Point start, end;
 
-    private static boolean pdpIsDifferentBySign(Segment main, Segment other) {
+    private static boolean pdpIsDifferentBySign(Segment main, Segment other, boolean countOn) {
         Vector mainVec = new Vector(main.start, main.end);
         Vector aux1 = new Vector(main.start, other.end);
         Vector aux2 = new Vector(main.start, other.start);
@@ -19,7 +19,7 @@ public class Segment {
         double pdp2 = mainVec.pdp(aux2);
 
         if (Math.abs(pdp1) <= THRESHOLD || Math.abs(pdp2) <= THRESHOLD) {
-            return false;
+            return countOn;
         }
 
         pdp1 /= Math.abs(pdp1);
@@ -48,14 +48,18 @@ public class Segment {
                 rangeIntersection(start.getY(), end.getY(), other.start.getY(), other.end.getY());
     }
     public boolean hasIntersection(Segment other) {
+        return hasIntersection(other, false);
+    }
+
+    public boolean hasIntersection(Segment other, boolean countOn) {
         if (!projectionIntersection(other)) {
             return false;
         }
 
         // в одну сторону
-        boolean oneWay = pdpIsDifferentBySign(this, other);
+        boolean oneWay = pdpIsDifferentBySign(this, other, countOn);
         // в обратную сторону
-        boolean otherWay = pdpIsDifferentBySign(other, this);
+        boolean otherWay = pdpIsDifferentBySign(other, this, countOn);
         return oneWay && otherWay;
     }
 }
