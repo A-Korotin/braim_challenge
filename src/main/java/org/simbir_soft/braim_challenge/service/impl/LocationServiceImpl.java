@@ -7,15 +7,12 @@ import org.simbir_soft.braim_challenge.domain.dto.Dto;
 import org.simbir_soft.braim_challenge.exception.DataConflictException;
 import org.simbir_soft.braim_challenge.exception.DataInvalidException;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
-import org.simbir_soft.braim_challenge.repository.AnimalRepository;
 import org.simbir_soft.braim_challenge.repository.LocationRepository;
-import org.simbir_soft.braim_challenge.service.AnimalService;
 import org.simbir_soft.braim_challenge.service.LocationService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor

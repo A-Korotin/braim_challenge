@@ -38,8 +38,6 @@ public class Area extends BaseEntity {
         Point p = new Point(location.getLatitude().doubleValue(), location.getLongitude().doubleValue());
 
 
-        return new Point(location.getLatitude().doubleValue(),
-                         location.getLongitude().doubleValue())
-                .isInsidePolygon(polygon);
+        return p.isInsidePolygon(polygon);
     }
 }

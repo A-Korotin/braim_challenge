@@ -1,7 +1,6 @@
 package org.simbir_soft.braim_challenge.domain.analytics;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -20,10 +19,6 @@ public class Analytics implements AnalyticIncrementable {
 
     private List<AnimalTypeAnalytic> animalsAnalytics = new ArrayList<>();
 
-
-    public void addAnalytics(AnimalTypeAnalytic analytic) {
-        animalsAnalytics.add(analytic);
-    }
 
     @Override
     public void addTotal() {

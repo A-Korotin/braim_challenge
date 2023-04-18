@@ -53,9 +53,9 @@ public class LocationController {
                                               @DecimalMax("90")
                                               BigDecimal latitude,
                                           @RequestParam
-                                                @DecimalMin("-180")
-                                                @DecimalMax("180")
-                                                BigDecimal longitude) {
+                                              @DecimalMin("-180")
+                                              @DecimalMax("180")
+                                              BigDecimal longitude) {
         return ResponseEntity.ok(locationService.findByLatitudeAndLongitude(latitude, longitude)
                 .orElseThrow(DataMissingException::new).getId());
     }
@@ -69,33 +69,40 @@ public class LocationController {
                                          @DecimalMin("-180")
                                          @DecimalMax("180")
                                          BigDecimal longitude) {
-        return ResponseEntity.ok(GeoHash.geoHashStringWithCharacterPrecision(latitude.doubleValue(), longitude.doubleValue(), 12));
+        return ResponseEntity.ok(GeoHash.geoHashStringWithCharacterPrecision(latitude.doubleValue(),
+                longitude.doubleValue(), 12));
     }
     @GetMapping("/geohashv2")
     public ResponseEntity<?> getHashv2(@RequestParam
-                                     @DecimalMin("-90")
-                                     @DecimalMax("90")
-                                     BigDecimal latitude,
+                                           @DecimalMin("-90")
+                                           @DecimalMax("90")
+                                           BigDecimal latitude,
                                      @RequestParam
-                                     @DecimalMin("-180")
-                                     @DecimalMax("180")
-                                     BigDecimal longitude) {
-        String hash = GeoHash.withCharacterPrecision(latitude.doubleValue(), longitude.doubleValue(), 12).toBase32();
+                                         @DecimalMin("-180")
+                                         @DecimalMax("180")
+                                         BigDecimal longitude) {
+        String hash = GeoHash.withCharacterPrecision(latitude.doubleValue(),
+                longitude.doubleValue(), 12).toBase32();
+
         byte[] bytes = hash.getBytes(StandardCharsets.UTF_8);
         return ResponseEntity.ok(new String(Base64.getEncoder().encode(bytes)));
     }
     @GetMapping("/geohashv3")
     public ResponseEntity<?> getHashv3(@RequestParam
-                                     @DecimalMin("-90")
-                                     @DecimalMax("90")
-                                     BigDecimal latitude,
+                                           @DecimalMin("-90")
+                                           @DecimalMax("90")
+                                           BigDecimal latitude,
                                      @RequestParam
-                                     @DecimalMin("-180")
-                                     @DecimalMax("180")
-                                     BigDecimal longitude) throws Throwable {
-        String hash = GeoHash.withCharacterPrecision(latitude.doubleValue(), longitude.doubleValue(), 12).toBase32();
+                                          @DecimalMin("-180")
+                                          @DecimalMax("180")
+                                          BigDecimal longitude) throws Throwable {
+        String hash = GeoHash.withCharacterPrecision(latitude.doubleValue(),
+                longitude.doubleValue(), 12).toBase32();
+
         MessageDigest md5 = MessageDigest.getInstance("MD5");
+
         byte[] encoded = md5.digest(hash.getBytes(StandardCharsets.UTF_8));
+        // разворот массива
         int i = encoded.length - 1, j = 0;
         while (i > j) {
             byte tmp = encoded[i];

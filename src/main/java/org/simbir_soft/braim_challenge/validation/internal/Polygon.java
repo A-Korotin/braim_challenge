@@ -1,8 +1,6 @@
 package org.simbir_soft.braim_challenge.validation.internal;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Area;
 
 import java.util.ArrayList;

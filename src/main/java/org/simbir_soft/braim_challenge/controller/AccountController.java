@@ -10,7 +10,6 @@ import org.simbir_soft.braim_challenge.domain.dto.AccountDto;
 import org.simbir_soft.braim_challenge.domain.dto.RegisterAccountDto;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.service.AccountService;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;

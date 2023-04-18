@@ -1,6 +1,5 @@
 package org.simbir_soft.braim_challenge.controller;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.dto.AreaDto;
@@ -22,7 +21,7 @@ public class AreaController {
     private final AnalyticsService analyticsService;
 
     @PostMapping("/areas")
-    public ResponseEntity<?> createArea(@Valid @RequestBody AreaDto dto) {
+    public ResponseEntity<?> createArea(@RequestBody AreaDto dto) {
         return ResponseEntity.status(201).body(areaService.save(dto));
     }
 
