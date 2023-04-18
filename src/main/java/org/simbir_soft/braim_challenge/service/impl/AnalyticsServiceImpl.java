@@ -35,10 +35,9 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     private void performCheck(AnalyticIncrementable analytic, Area area, Animal animal, LocalDate start, LocalDate end) {
-        // проверка точки чипирования
-        if (animal.getChippingDateTime().isAfter(start.atStartOfDay(ZoneId.systemDefault())) &&
-                animal.getChippingDateTime().isBefore(end.atStartOfDay(ZoneId.systemDefault())) &&
-                area.locationInside(animal.getChippingLocation())) {
+        if (animal.getLastDateTime().isAfter(start.atStartOfDay(ZoneId.systemDefault())) &&
+                animal.getLastDateTime().isBefore(end.atStartOfDay(ZoneId.systemDefault())) &&
+                area.locationInside(animal.getLastLocation())) {
             analytic.addTotal();
         }
 

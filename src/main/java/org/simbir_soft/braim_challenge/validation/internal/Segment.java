@@ -62,4 +62,15 @@ public class Segment {
         boolean otherWay = pdpIsDifferentBySign(other, this, countOn);
         return oneWay && otherWay;
     }
+
+    public boolean contains(Point other) {
+        Line line = new Line(start, end);
+
+        // точка лежит на направляющей прямой и её координаты находятся в пределах заданного отрезка
+        return line.pointOnLine(other) &&
+                Math.min(start.getX(), end.getX()) <= other.getX() &&
+                Math.max(start.getX(), end.getX()) >= other.getX() &&
+                Math.min(start.getY(), end.getY()) <= other.getY() &&
+                Math.max(start.getY(), end.getY()) >= other.getY();
+    }
 }

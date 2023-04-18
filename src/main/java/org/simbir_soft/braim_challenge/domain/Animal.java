@@ -142,4 +142,21 @@ public class Animal extends BaseEntity {
             }
         } catch (IndexOutOfBoundsException ignored) {}
     }
+
+    @JsonIgnore
+    public Location getLastLocation() {
+        if (visitedLocations.size() == 0) {
+            return chippingLocation;
+        }
+
+        return visitedLocations.get(visitedLocations.size() - 1).getLocation();
+    }
+
+    @JsonIgnore
+    public ZonedDateTime getLastDateTime() {
+        if (visitedLocations.size() == 0) {
+            return chippingDateTime;
+        }
+        return visitedLocations.get(visitedLocations.size() - 1).getVisitTime();
+    }
 }

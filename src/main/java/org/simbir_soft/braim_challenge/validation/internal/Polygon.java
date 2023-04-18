@@ -37,7 +37,6 @@ public class Polygon {
         return false;
     }
 
-    // алгоритм трассировки лучей
     public boolean isInside(Polygon other) {
         return points.stream().allMatch(p -> p.isInsidePolygon(other));
     }

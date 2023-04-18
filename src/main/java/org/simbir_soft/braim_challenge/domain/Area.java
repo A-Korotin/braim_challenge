@@ -28,12 +28,15 @@ public class Area extends BaseEntity {
 
     @Transient
     @JsonIgnore
-    private Polygon polygon = null;
+    private Polygon polygon;
 
     public boolean locationInside(Location location) {
         if (polygon == null) {
             polygon = new Polygon(this);
         }
+
+        Point p = new Point(location.getLatitude().doubleValue(), location.getLongitude().doubleValue());
+
 
         return new Point(location.getLatitude().doubleValue(),
                          location.getLongitude().doubleValue())
