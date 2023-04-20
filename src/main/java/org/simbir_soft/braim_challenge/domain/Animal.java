@@ -10,6 +10,8 @@ import org.simbir_soft.braim_challenge.json.serializer.CustomEntityListSerialize
 import org.simbir_soft.braim_challenge.json.serializer.CustomEntitySerializer;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -144,19 +146,20 @@ public class Animal extends BaseEntity {
     }
 
     @JsonIgnore
-    public Location getLastLocation() {
-        if (visitedLocations.size() == 0) {
-            return chippingLocation;
+    public Optional<Location> getLastLocation(LocalDate start, LocalDate end) {
+        if (visitedLocations.size() == 0 &&
+            chippingDateTime.isAfter(start.atStartOfDay(ZoneId.systemDefault())) &&
+            chippingDateTime.isBefore(end.atStartOfDay(ZoneId.systemDefault()))) {
+            return Optional.of(chippingLocation);
         }
+        List<TimedLocation> locations = visitedLocations.stream().filter(l ->
+                        l.getVisitTime().isAfter(start.atStartOfDay(ZoneId.systemDefault())) &&
+                        l.getVisitTime().isBefore(end.atStartOfDay(ZoneId.systemDefault()))
+                )
+                .toList();
 
-        return visitedLocations.get(visitedLocations.size() - 1).getLocation();
-    }
 
-    @JsonIgnore
-    public ZonedDateTime getLastDateTime() {
-        if (visitedLocations.size() == 0) {
-            return chippingDateTime;
-        }
-        return visitedLocations.get(visitedLocations.size() - 1).getVisitTime();
+        return locations.size() == 0 ? Optional.empty() :
+                Optional.of(locations.get(locations.size() - 1).getLocation());
     }
 }

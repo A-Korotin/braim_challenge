@@ -1,27 +1,24 @@
 package org.simbir_soft.braim_challenge;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.simbir_soft.braim_challenge.domain.Account;
-import org.simbir_soft.braim_challenge.domain.Animal;
-import org.simbir_soft.braim_challenge.domain.AnimalType;
+import org.simbir_soft.braim_challenge.validation.internal.Point;
+import org.simbir_soft.braim_challenge.validation.internal.Segment;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class BraimChallengeApplicationTests {
 
     @Test
-    void contextLoads() throws Throwable{
-        Animal animal = new Animal();
-        AnimalType type = new AnimalType();
-        type.setId(1L);
-        Account chipper = new Account();
-        chipper.setId(1L);
-        animal.getAnimalTypes().add(type);
-        animal.setChipper(chipper);
-        ObjectMapper mapper = new ObjectMapper();
-        String s = mapper.writeValueAsString(animal);
-        System.out.println(s);
+    void contextLoads() throws Throwable {
+        Point start = new Point(0, 0),
+                end = new Point(50, 0);
+
+        Segment segment = new Segment(start, end);
+
+        Point p = new Point(25, 0);
+        Point far = new Point(25, 1000);
+        Segment s = new Segment(p, far);
+        System.out.println(s.hasIntersection(s,false));
     }
 
 }

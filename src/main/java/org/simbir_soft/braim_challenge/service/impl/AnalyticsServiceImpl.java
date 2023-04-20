@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,9 +33,8 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     private void performCheck(AnalyticIncrementable analytic, Area area, Animal animal, LocalDate start, LocalDate end) {
-        if (animal.getLastDateTime().isAfter(start.atStartOfDay(ZoneId.systemDefault())) &&
-                animal.getLastDateTime().isBefore(end.atStartOfDay(ZoneId.systemDefault())) &&
-                area.locationInside(animal.getLastLocation())) {
+        Optional<Location> last = animal.getLastLocation(start, end);
+        if (last.isPresent() && area.locationInside(last.get())) {
             analytic.addTotal();
         }
 

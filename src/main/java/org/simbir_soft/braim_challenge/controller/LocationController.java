@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.dto.LocationDto;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
+import org.simbir_soft.braim_challenge.service.GeoHashService;
 import org.simbir_soft.braim_challenge.service.LocationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +25,7 @@ import java.util.Base64;
 @RequestMapping("/locations")
 public class LocationController {
     private final LocationService locationService;
+    private final GeoHashService geoHashService;
 
     @PostMapping
     public ResponseEntity<?> createLocation(@Valid @RequestBody LocationDto locationDto) {
@@ -69,8 +71,7 @@ public class LocationController {
                                          @DecimalMin("-180")
                                          @DecimalMax("180")
                                          BigDecimal longitude) {
-        return ResponseEntity.ok(GeoHash.geoHashStringWithCharacterPrecision(latitude.doubleValue(),
-                longitude.doubleValue(), 12));
+        return ResponseEntity.ok(geoHashService.getHashV1(longitude, latitude));
     }
     @GetMapping("/geohashv2")
     public ResponseEntity<?> getHashv2(@RequestParam
@@ -81,11 +82,7 @@ public class LocationController {
                                          @DecimalMin("-180")
                                          @DecimalMax("180")
                                          BigDecimal longitude) {
-        String hash = GeoHash.withCharacterPrecision(latitude.doubleValue(),
-                longitude.doubleValue(), 12).toBase32();
-
-        byte[] bytes = hash.getBytes(StandardCharsets.UTF_8);
-        return ResponseEntity.ok(new String(Base64.getEncoder().encode(bytes)));
+        return ResponseEntity.ok(geoHashService.getHashV2(longitude, latitude));
     }
     @GetMapping("/geohashv3")
     public ResponseEntity<?> getHashv3(@RequestParam
@@ -96,22 +93,6 @@ public class LocationController {
                                           @DecimalMin("-180")
                                           @DecimalMax("180")
                                           BigDecimal longitude) throws Throwable {
-        String hash = GeoHash.withCharacterPrecision(latitude.doubleValue(),
-                longitude.doubleValue(), 12).toBase32();
-
-        MessageDigest md5 = MessageDigest.getInstance("MD5");
-
-        byte[] encoded = md5.digest(hash.getBytes(StandardCharsets.UTF_8));
-        // разворот массива
-        int i = encoded.length - 1, j = 0;
-        while (i > j) {
-            byte tmp = encoded[i];
-            encoded[i] = encoded[j];
-            encoded[j] = tmp;
-            i--;
-            j++;
-        }
-
-        return ResponseEntity.ok(Base64.getEncoder().encode(encoded));
+        return ResponseEntity.ok(geoHashService.getHashV3(longitude, latitude));
     }
 }
