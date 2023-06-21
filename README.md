@@ -8,7 +8,7 @@ git clone https://github.com/A-Korotin/braim_challenge.git
 ```
 ### 2) Переход в корневую директорию проекта
 ```
-cd braim_challenge
+cd ./braim_challenge
 ```
 ### 3) Сборка jar-архива приложения
 ```
@@ -16,15 +16,17 @@ cd braim_challenge
 ```
 ### 4) Сборка Docker-образа
 ```
-docker build . -t webapi
+sudo docker build . -t webapi
 ``` 
 **Важно!** Tag образа для успешной сборки должен быть именно ``webapi``
 ### 5) Запуск приложения
 ```
-docker compose up -d
+sudo docker compose up -d
 ```
+Сборка включает в себя пакет автотестов. Результаты и процент выполнения можно посмотреть через веб-интерфейс ``http://localhost:8090/``
 
-Для штатного завершения работы приложения нужно вызвать команду ``docker compose down`` из корневой директории проекта.
+Для штатного завершения работы приложения нужно вызвать команду ``sudo docker compose down`` из корневой директории проекта.
+
 
 # Документация и технические требования
 [Этап 1](https://docs.google.com/document/d/1lXfve2LdLSTLqlCnwzN4jSAjz6U18l1nlgK0pivJGhA/edit?usp=sharing)
