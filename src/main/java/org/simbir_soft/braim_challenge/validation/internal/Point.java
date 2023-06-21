@@ -13,8 +13,13 @@ public class Point {
         int intersectionCount = 0;
         Segment s = new Segment(this, outerPoint);
 
+        // точка лежит на стороне многоугольника
+        if(polygon.getSegments().stream().anyMatch(seg -> seg.contains(this))) {
+            return true;
+        }
+
         for (Segment segment : polygon.getSegments()) {
-            if (segment.hasIntersection(s)) {
+            if (segment.hasIntersection(s,true)) {
                 intersectionCount++;
             }
         }

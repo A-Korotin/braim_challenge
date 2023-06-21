@@ -1,9 +1,7 @@
 package org.simbir_soft.braim_challenge.config;
 
-import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.UserRole;
-import org.simbir_soft.braim_challenge.domain.dto.AccountDto;
 import org.simbir_soft.braim_challenge.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -27,7 +25,7 @@ public class DatabaseSetup implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         for (var account: initialAccounts) {
             if (service.findByEmail(account.getEmail()).isEmpty()) {
                 service.register(account);

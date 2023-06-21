@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.simbir_soft.braim_challenge.aspect.annotation.CheckAuth;
 import org.simbir_soft.braim_challenge.domain.Account;
 import org.simbir_soft.braim_challenge.domain.UserRole;
 import org.simbir_soft.braim_challenge.exception.AccessForbiddenException;
 import org.simbir_soft.braim_challenge.repository.AccountRepository;
-import org.simbir_soft.braim_challenge.service.AccountService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 

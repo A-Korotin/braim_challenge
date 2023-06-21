@@ -1,8 +1,6 @@
 package org.simbir_soft.braim_challenge.validation.internal;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.Area;
 
 import java.util.ArrayList;
@@ -37,7 +35,6 @@ public class Polygon {
         return false;
     }
 
-    // алгоритм трассировки лучей
     public boolean isInside(Polygon other) {
         return points.stream().allMatch(p -> p.isInsidePolygon(other));
     }

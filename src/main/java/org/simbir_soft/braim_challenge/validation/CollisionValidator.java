@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @Component
-@RequiredArgsConstructor
 public class CollisionValidator {
 
     public boolean isValid(Area area, Iterable<Area> areas) {

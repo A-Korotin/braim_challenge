@@ -9,6 +9,7 @@ import org.simbir_soft.braim_challenge.domain.Location;
 import org.simbir_soft.braim_challenge.domain.OrderedLocation;
 import org.simbir_soft.braim_challenge.validation.annotation.NonIntersectingPolygon;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -26,16 +27,18 @@ public class AreaDto implements Dto<Area> {
 
     @Override
     public Area fromDto() {
-        AtomicLong order = new AtomicLong();
+        long order = 0;
+
+        List<OrderedLocation> points = new ArrayList<>(areaPoints.size());
+
+        for (LocationDto dto: areaPoints) {
+            Location location = dto.fromDto();
+            points.add(new OrderedLocation(order++, location.getLongitude(), location.getLatitude(), null));
+        }
 
         return Area.builder()
                 .name(name)
-                .areaPoints(areaPoints.stream().map(dto -> {
-                    Location location = dto.fromDto();
-                    return new OrderedLocation(order.getAndIncrement(),
-                                    location.getLongitude(), location.getLatitude(), null);
-                        })
-                    .toList())
+                .areaPoints(points)
                 .build();
     }
 }

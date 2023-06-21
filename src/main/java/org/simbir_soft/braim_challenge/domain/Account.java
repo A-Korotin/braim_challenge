@@ -2,11 +2,7 @@ package org.simbir_soft.braim_challenge.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.simbir_soft.braim_challenge.domain.dto.AccountDto;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

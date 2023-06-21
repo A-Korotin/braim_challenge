@@ -5,7 +5,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.simbir_soft.braim_challenge.aspect.annotation.ExistingId;
-import org.simbir_soft.braim_challenge.exception.DataInvalidException;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.service.CrudService;
 import org.springframework.context.ApplicationContext;

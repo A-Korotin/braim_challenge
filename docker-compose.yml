@@ -16,9 +16,7 @@ services:
 
   # Сервис для разворачивания контейнера с приложением
   webapi:
-    pull_policy: build
-    build:
-      dockerfile: Dockerfile
+    image: webapi
     ports:
       - "8080:8080"
     depends_on:

@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.simbir_soft.braim_challenge.domain.dto.AreaDto;
+import org.simbir_soft.braim_challenge.exception.DataInvalidException;
 import org.simbir_soft.braim_challenge.exception.DataMissingException;
 import org.simbir_soft.braim_challenge.service.AnalyticsService;
 import org.simbir_soft.braim_challenge.service.AreaService;
@@ -33,7 +34,7 @@ public class AreaController {
 
     @PutMapping("/areas/{areaId}")
     public ResponseEntity<?> editArea(@PathVariable @Min(1) Long areaId,
-                                      @RequestBody AreaDto dto) {
+                                      @Valid @RequestBody AreaDto dto) {
         return ResponseEntity.ok(areaService.update(areaId, dto));
     }
 
@@ -48,6 +49,10 @@ public class AreaController {
     public ResponseEntity<?> analytics(@PathVariable @Min(1) Long areaId,
                                        @RequestParam LocalDate startDate,
                                        @RequestParam LocalDate endDate) {
+        if (startDate.isAfter(endDate) || startDate.equals(endDate)) {
+            throw new DataInvalidException();
+        }
+
         return ResponseEntity.ok(analyticsService.getAnalytics(areaId, startDate, endDate));
     }
 }

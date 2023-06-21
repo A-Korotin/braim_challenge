@@ -13,12 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.chrono.ChronoZonedDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.StreamSupport;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,10 +33,8 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     }
 
     private void performCheck(AnalyticIncrementable analytic, Area area, Animal animal, LocalDate start, LocalDate end) {
-        // проверка точки чипирования
-        if (animal.getChippingDateTime().isAfter(start.atStartOfDay(ZoneId.systemDefault())) &&
-                animal.getChippingDateTime().isBefore(end.atStartOfDay(ZoneId.systemDefault())) &&
-                area.locationInside(animal.getChippingLocation())) {
+        Optional<Location> last = animal.getLastLocation(start, end);
+        if (last.isPresent() && area.locationInside(last.get())) {
             analytic.addTotal();
         }
 
@@ -97,6 +93,7 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     @ExistingId(validator = AreaService.class)
     public Analytics getAnalytics(Long areaId, LocalDate start, LocalDate end) {
         Iterable<Animal> animals = animalService.findAll();
+        // точно существует, проверено аннотацией ExistingId
         Area area = areaService.findById(areaId).get();
         Analytics analytics = countTotal(area, animals, start, end);
         analytics.setAnimalsAnalytics(countByType(area, animals, start, end));

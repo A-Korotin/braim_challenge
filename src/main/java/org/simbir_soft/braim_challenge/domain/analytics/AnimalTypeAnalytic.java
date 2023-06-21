@@ -1,7 +1,6 @@
 package org.simbir_soft.braim_challenge.domain.analytics;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

@@ -59,7 +59,7 @@ public class PolygonValidator implements ConstraintValidator<NonIntersectingPoly
                 Segment segment2 = segments.get(j);
 
                 // есть пересечение не соседних сторон многоугольника
-                if (segment1.hasIntersection(segment2)) {
+                if (segment1.hasIntersection(segment2, true)) {
                     return false;
                 }
             }
